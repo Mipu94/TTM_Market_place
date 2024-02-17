@@ -1,0 +1,10 @@
+create BEP20 Token: https://tokencenter.github.io/bep20-generator/create-token/
+
+
+CONCAC (CCC)
+Address: 0x079F487B1dCD66f75D8ABD4C987f5F67D0795233
+Supply: 10000000 CCC
+
+
+Transaction Hash: 0xf45634665f5f35c79fcccc78d737f28d55ea3de0a4a20553b56312cc2b0316f4
+
