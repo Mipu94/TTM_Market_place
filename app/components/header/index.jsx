@@ -13,10 +13,7 @@ import { IoWallet } from "react-icons/io5";
 import { FiSearch } from "react-icons/fi";
 import { GoThreeBars } from "react-icons/go";
 
-import { useConnectionStatus, ConnectWallet } from "@thirdweb-dev/react";
-  
 export default function Header() {
-    const connectionStatus = useConnectionStatus();  
   const [isSticky, setIsSticky] = useState(false);
   const { theme, setTheme } = useTheme();
 
@@ -63,7 +60,10 @@ export default function Header() {
                 <FiSearch />
               </button>
               <div className="mx-3 mx-sm-4 d-none d-sm-block">
-              <ConnectWallet></ConnectWallet>
+                <CtaButton href={"/wallet-connect"}>
+                  <IoWallet className="me-md-2" />
+                  <span className="d-none d-md-block"> Wallet connect</span>
+                </CtaButton>
               </div>
               <button
                 className={styles.mode_toggle_btn}

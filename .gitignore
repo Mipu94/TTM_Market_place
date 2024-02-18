@@ -4,3 +4,5 @@ node_modules
 #Hardhat files
 cache
 artifacts
+app/typechain
+typechain-types

@@ -13,37 +13,13 @@ import * as Contracts from ".";
 declare module "hardhat/types/runtime" {
   interface HardhatEthersHelpers extends HardhatEthersHelpersBase {
     getContractFactory(
-      name: "IERC1155Errors",
+      name: "Ownable",
       signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.IERC1155Errors__factory>;
-    getContractFactory(
-      name: "IERC20Errors",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.IERC20Errors__factory>;
-    getContractFactory(
-      name: "IERC721Errors",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.IERC721Errors__factory>;
-    getContractFactory(
-      name: "IERC4906",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.IERC4906__factory>;
+    ): Promise<Contracts.Ownable__factory>;
     getContractFactory(
       name: "ERC721",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.ERC721__factory>;
-    getContractFactory(
-      name: "ERC721Enumerable",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.ERC721Enumerable__factory>;
-    getContractFactory(
-      name: "ERC721URIStorage",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.ERC721URIStorage__factory>;
-    getContractFactory(
-      name: "IERC721Enumerable",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.IERC721Enumerable__factory>;
     getContractFactory(
       name: "IERC721Metadata",
       signerOrOptions?: ethers.Signer | FactoryOptions
@@ -65,58 +41,28 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.IERC165__factory>;
     getContractFactory(
-      name: "Math",
+      name: "Marketplace",
       signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.Math__factory>;
-    getContractFactory(
-      name: "Strings",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.Strings__factory>;
+    ): Promise<Contracts.Marketplace__factory>;
     getContractFactory(
       name: "TTM_NFT",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.TTM_NFT__factory>;
+    getContractFactory(
+      name: "MarketItemArray",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.MarketItemArray__factory>;
 
     getContractAt(
-      name: "IERC1155Errors",
+      name: "Ownable",
       address: string,
       signer?: ethers.Signer
-    ): Promise<Contracts.IERC1155Errors>;
-    getContractAt(
-      name: "IERC20Errors",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.IERC20Errors>;
-    getContractAt(
-      name: "IERC721Errors",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.IERC721Errors>;
-    getContractAt(
-      name: "IERC4906",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.IERC4906>;
+    ): Promise<Contracts.Ownable>;
     getContractAt(
       name: "ERC721",
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.ERC721>;
-    getContractAt(
-      name: "ERC721Enumerable",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.ERC721Enumerable>;
-    getContractAt(
-      name: "ERC721URIStorage",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.ERC721URIStorage>;
-    getContractAt(
-      name: "IERC721Enumerable",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.IERC721Enumerable>;
     getContractAt(
       name: "IERC721Metadata",
       address: string,
@@ -143,20 +89,20 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.IERC165>;
     getContractAt(
-      name: "Math",
+      name: "Marketplace",
       address: string,
       signer?: ethers.Signer
-    ): Promise<Contracts.Math>;
-    getContractAt(
-      name: "Strings",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.Strings>;
+    ): Promise<Contracts.Marketplace>;
     getContractAt(
       name: "TTM_NFT",
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.TTM_NFT>;
+    getContractAt(
+      name: "MarketItemArray",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.MarketItemArray>;
 
     // default types
     getContractFactory(
