@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 import styles from "./header.module.sass";
 import Link from "next/link";
@@ -6,29 +6,46 @@ import Image from "next/image";
 import CtaButton from "../cta-button";
 import Navbar from "../navbar";
 import { useTheme } from "next-themes";
-
+import Web3Modal from 'web3modal'
 // ICONS
 import ThemeIcon from "../../public/static/icons/app-mode-icon";
 import { IoWallet } from "react-icons/io5";
 import { FiSearch } from "react-icons/fi";
-import { GoThreeBars } from "react-icons/go";
+import { useWebStore } from "../../store/web3Store";
+import { enqueueSnackbar } from 'notistack';
+import networks from "../../contracts/networks";
+type Props = {};
+
+declare global {
+  interface Window {
+    ethereum: any;
+    web3: any
+  }
+}
 
 export default function Header() {
+
+  const { changeNetwork, walletAddress, connect, isConnected } = useWebStore();
+  const chainId = useRef(typeof window !== 'undefined' ? window.ethereum.chainId : null)
   const [isSticky, setIsSticky] = useState(false);
   const { theme, setTheme } = useTheme();
-
   useEffect(() => {
     window && window.scrollY >= 1 ? setIsSticky(true) : setIsSticky(false);
     window.onscroll = () => {
       window.scrollY >= 1 ? setIsSticky(true) : setIsSticky(false);
     };
-  }, []);
+  });
+
+
+
+  async function mintToken() {
+    await connect();
+  }
 
   return (
     <div
-      className={`${styles.main_header_wrapper}  ${
-        isSticky && styles.sticky_top
-      }`}
+      className={`${styles.main_header_wrapper}  ${isSticky && styles.sticky_top
+        }`}
     >
       <div className="container">
         <div className="row align-items-center">
@@ -60,10 +77,22 @@ export default function Header() {
                 <FiSearch />
               </button>
               <div className="mx-3 mx-sm-4 d-none d-sm-block">
-                <CtaButton href={"/wallet-connect"}>
-                  <IoWallet className="me-md-2" />
-                  <span className="d-none d-md-block"> Wallet connect</span>
-                </CtaButton>
+                {
+                  chainId.current != (process.env.NODE_ENV == "development" ? networks.dev.chainId : networks.prod.chainId) ?
+                    <div onClick={changeNetwork}>
+                      <CtaButton href={""} >
+                        <IoWallet className="me-md-2" />
+                        <span className="d-none d-md-block"> {"Change network "}</span>
+                      </CtaButton>
+                    </div>
+                    :
+                    <div onClick={() => { if (!isConnected) connect() }}>
+                      <CtaButton href={""} >
+                        <IoWallet className="me-md-2" />
+                        <span className="d-none d-md-block"> {isConnected ? walletAddress?.slice(0, 4) + "..." + walletAddress?.slice(38) : "Wallet connect"}</span>
+                      </CtaButton>
+                    </div>
+                }
               </div>
               <button
                 className={styles.mode_toggle_btn}
@@ -80,3 +109,5 @@ export default function Header() {
     </div>
   );
 }
+
+

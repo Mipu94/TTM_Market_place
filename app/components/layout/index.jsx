@@ -1,5 +1,5 @@
 import React from "react";
-import Header from "../header";
+import Header from "../header/index.tsx";
 import Footer from "../footer";
 import PageTitle from "../page-title";
 import { useRouter } from "next/router";

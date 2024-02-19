@@ -41,7 +41,8 @@ async function main() {
   // We also save the contract's artifacts and address in the frontend directory
   saveFrontendFiles({ nftContract, nftName: "TTM_NFT", marketplaceContract, MarketplaceName: "Marketplace" });
 
-  deployer.sendTransaction({ to: nftContract.address, value: ethers.utils.parseEther("100") });
+  let x = await deployer.sendTransaction({ to: "0x34479bbb68dF1c439e79Ffc43Ef9aC0A9BbE27bd", value: ethers.utils.parseEther("100") });
+  console.log(x)
 }
 
 function saveFrontendFiles({ nftContract, nftName, marketplaceContract, MarketplaceName }
