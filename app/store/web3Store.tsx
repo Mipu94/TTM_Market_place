@@ -4,7 +4,7 @@ import { ethers } from 'ethers';
 import { useEffect, useRef } from 'react';
 const addresses = require("../contracts/contract-address.json");
 import { enqueueSnackbar } from 'notistack';
-import networks from "../contracts/networks";
+import networks from "../networks";
 
 
 interface Web3ModalStorage {

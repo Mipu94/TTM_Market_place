@@ -11,7 +11,7 @@ import ThemeIcon from "../../public/static/icons/app-mode-icon";
 import { IoWallet } from "react-icons/io5";
 import { FiSearch } from "react-icons/fi";
 import { useWebStore } from "../../store/web3Store";
-import networks from "../../contracts/networks";
+import networks from "../../networks";
 type Props = {};
 
 declare global {
