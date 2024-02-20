@@ -86,7 +86,7 @@
                 .nft_owner_link
                     font-size: 15px
                     color: var(--main_text_color)
-                    font-weight: 700
+                    font-weight: 500
         .nft_bid_wrapper
             display: flex
             flex-direction: column
@@ -99,23 +99,28 @@
                 color: var(--main_text_color)
                 font-weight: 700
                 text-transform: uppercase
-        .nft_place_bid_btn
-            font-weight: 700
-            padding: .5rem 1rem
-            text-transform: capitalize
-            border-radius: 1000px
-            border: 2px solid variables.$purple-color
+        .nft_place_bid_wrap
+            width: 100%
             display: flex
             align-items: center
-            transition: all variables.$hover-trans-d
-            svg
-                font-size: 20px
-                line-height: 0
-                margin-bottom: 2px
-            &:hover
-                border-color: variables.$white-text-color
-                background: #fff
-                color: variables.$purple-color
+            justify-content: center
+            .nft_place_bid_btn
+                font-weight: 700
+                padding: .5rem 1rem
+                text-transform: capitalize
+                border-radius: 1000px
+                border: 2px solid variables.$purple-color
+                display: flex
+                align-items: center
+                transition: all variables.$hover-trans-d
+                svg
+                    font-size: 20px
+                    line-height: 0
+                    margin-bottom: 2px
+                &:hover
+                    border-color: variables.$white-text-color
+                    background: #fff
+                    color: variables.$purple-color
         .nft_activity_link
             text-transform: capitalize
             color: variables.$gray-color
@@ -125,8 +130,8 @@
             svg
                 font-size: 22px
                 color: var(--main_text_color)
-            
-html[data-theme='light'] 
+
+html[data-theme='light']
     .nft_card_styled
         .nft_info_row
             .nft_place_bid_btn
@@ -134,4 +139,3 @@ html[data-theme='light']
                 &:hover
                     background: variables.$purple-color
                     color: variables.$white-text-color
-                    
