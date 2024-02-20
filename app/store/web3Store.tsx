@@ -46,6 +46,7 @@ export const useWebStore = create<Web3ModalStorage>((set, get) => ({
             return;
         }
         const provider = new ethers.providers.Web3Provider(window.ethereum);
+        set({ NFTContract: TTM_NFT__factory.connect(addresses.nftAddress, provider), MarketplaceContract: Marketplace__factory.connect(addresses.marketplaceAddress, provider) });
         const accounts = await provider.listAccounts();
         if (accounts.length == 0) {
             return set({ isConnected: false, walletAddress: null });
@@ -79,7 +80,6 @@ export const useWebStore = create<Web3ModalStorage>((set, get) => ({
             window.location.reload();
         });
 
-        return set({ NFTContract: TTM_NFT__factory.connect(addresses.nftAddress, provider), MarketplaceContract: Marketplace__factory.connect(addresses.marketplaceAddress, provider) });
 
     },
     isInit: false,

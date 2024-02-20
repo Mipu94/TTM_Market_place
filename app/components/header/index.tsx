@@ -6,13 +6,11 @@ import Image from "next/image";
 import CtaButton from "../cta-button";
 import Navbar from "../navbar";
 import { useTheme } from "next-themes";
-import Web3Modal from 'web3modal'
 // ICONS
 import ThemeIcon from "../../public/static/icons/app-mode-icon";
 import { IoWallet } from "react-icons/io5";
 import { FiSearch } from "react-icons/fi";
 import { useWebStore } from "../../store/web3Store";
-import { enqueueSnackbar } from 'notistack';
 import networks from "../../contracts/networks";
 type Props = {};
 
@@ -35,12 +33,6 @@ export default function Header() {
       window.scrollY >= 1 ? setIsSticky(true) : setIsSticky(false);
     };
   });
-
-
-
-  async function mintToken() {
-    await connect();
-  }
 
   return (
     <div

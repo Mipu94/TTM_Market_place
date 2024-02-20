@@ -10,12 +10,12 @@ export default function Home() {
   return (
     <div className="home_page">
       <Hero />
-      <LiveAuctions />
-      <TopSellsers />
+      {/* <LiveAuctions /> */}
+      {/* <TopSellsers /> */}
       <TodayPicks />
-      <CategoriesSlider />
-      <PopularCollection />
-      <Features />
+      {/* <CategoriesSlider /> */}
+      {/* <PopularCollection /> */}
+      {/* <Features /> */}
     </div>
   );
 }
