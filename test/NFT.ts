@@ -20,7 +20,7 @@ describe("deploy NFT Contract", function () {
   describe("test mint nft", function () {
     it("test mint", async function () {
       const { nftContract, marketPlaceContract, marketPlace, owner, addr1 } = await loadFixture(deployTokenFixture);
-      await nftContract.mint(addr1.address, "google.com", 3);
+      await nftContract.mint(addr1.address, "google.com");
       const tokenId = 0;
       expect(await nftContract.balanceOf(addr1.address)).to.equal(1);
       expect(await nftContract.ownerOf(tokenId)).to.equal(addr1.address);
@@ -30,7 +30,7 @@ describe("deploy NFT Contract", function () {
   describe(" check marketplace", function () {
     it("test list nft", async function () {
       const { nftContract, marketPlaceContract, marketPlace, owner, addr1 } = await loadFixture(deployTokenFixture);
-      await nftContract.mint(addr1.address, "google.com", 3);
+      await nftContract.mint(addr1.address, "google.com");
       const tokenId = 0;
       expect(await nftContract.balanceOf(addr1.address)).to.equal(1);
       expect(await nftContract.ownerOf(tokenId)).to.equal(addr1.address);
@@ -42,7 +42,7 @@ describe("deploy NFT Contract", function () {
 
     it("test delist nft", async function () {
       const { nftContract, marketPlaceContract, marketPlace, owner, addr1 } = await loadFixture(deployTokenFixture);
-      await nftContract.mint(addr1.address, "google.com", 3);
+      await nftContract.mint(addr1.address, "google.com");
       const tokenId = 0;
       expect(await nftContract.balanceOf(addr1.address)).to.equal(1);
       expect(await nftContract.ownerOf(tokenId)).to.equal(addr1.address);
@@ -59,7 +59,7 @@ describe("deploy NFT Contract", function () {
 
     it("test change price of listed item", async function () {
       const { nftContract, marketPlaceContract, marketPlace, owner, addr1 } = await loadFixture(deployTokenFixture);
-      await nftContract.mint(addr1.address, "google.com", 3);
+      await nftContract.mint(addr1.address, "google.com");
       const tokenId = 0;
       expect(await nftContract.balanceOf(addr1.address)).to.equal(1);
       expect(await nftContract.ownerOf(tokenId)).to.equal(addr1.address);
@@ -77,7 +77,7 @@ describe("deploy NFT Contract", function () {
 
     it("test buy item", async function () {
       const { nftContract, marketPlaceContract, marketPlace, owner, addr1, addr2 } = await loadFixture(deployTokenFixture);
-      await nftContract.mint(addr1.address, "google.com", 3);
+      await nftContract.mint(addr1.address, "google.com");
       const tokenId = 0;
       const itemId = 0;
       expect(await nftContract.balanceOf(addr1.address)).to.equal(1);
