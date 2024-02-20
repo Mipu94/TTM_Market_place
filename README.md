@@ -23,7 +23,7 @@ config file: hardhat.config.ts
 deploy script: scripts/deploy.js
 
 ```sh
-npx hardhat run scripts/deploy.js --network localhost
+npx hardhat run scripts/deploy.ts --network localhost
 ```
 
 # Start dapp
