@@ -7,3 +7,4 @@ artifacts
 app/typechain
 typechain-types
 app/contracts
+typechain-types
