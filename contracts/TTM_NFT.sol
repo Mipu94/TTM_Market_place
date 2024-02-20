@@ -1,19 +1,21 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/IERC721Enumerable.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "hardhat/console.sol";
 
-contract TTM_NFT is ERC721 {
-    uint256 public nextTokenId = 0;
+contract TTM_NFT is ERC721URIStorage, Ownable {
+    uint256 public totalMinted = 0;
     uint256 public mintingPrice = 3 ether;
+    uint256 public totalNFT = 300;
 
     struct Image {
         string uri;
     }
+    uint256[] public mintedTokens;
     address nftMarketPlaceAddress;
-    mapping(uint256 => Image) public images;
 
     constructor(
         address _nftMarketPlaceAddress
@@ -21,24 +23,23 @@ contract TTM_NFT is ERC721 {
         nftMarketPlaceAddress = _nftMarketPlaceAddress;
     }
 
-    function mint(address to, string memory uri) external payable {
+    function mint(uint256 _tokenId, string memory _tokenURI) external payable {
         require(msg.value >= mintingPrice, "Insufficient funds sent");
-        _safeMint(to, nextTokenId);
-        images[nextTokenId] = Image(uri);
-        nextTokenId++;
+        require(totalMinted < totalNFT, "All NFTs have been minted");
+        require(!_exists(_tokenId), "Token already exists");
+
+        _safeMint(msg.sender, _tokenId);
+        _setTokenURI(_tokenId, _tokenURI);
         setApprovalForAll(nftMarketPlaceAddress, true);
+        mintedTokens.push(_tokenId);
+        totalMinted++;
     }
 
-    // function setImagePrice(uint256 tokenId, uint256 price) external onlyOwner {
-    //     images[tokenId].price = price;
-    // }
+    function setMintingPrice(uint256 _mintingPrice) external onlyOwner {
+        mintingPrice = _mintingPrice;
+    }
 
-    // function buyImage(uint256 tokenId) external payable {
-    //     require(_exists(tokenId), "Token does not exist");
-    //     require(msg.value >= images[tokenId].price, "Insufficient funds sent");
-
-    //     address seller = ownerOf(tokenId);
-    //     payable(seller).transfer(msg.value);
-    //     _transfer(seller, msg.sender, tokenId);
-    // }
+    function getAllMintedTokens() external view returns (uint256[] memory) {
+        return mintedTokens;
+    }
 }

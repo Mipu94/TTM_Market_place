@@ -24,18 +24,34 @@ describe("deploy NFT Contract", function () {
   describe("test mint nft", function () {
     it("test mint", async function () {
       const { nftContract, marketPlaceContract, marketPlace, owner, addr1 } = await loadFixture(deployTokenFixture);
-      await nftContract.mint(addr1.address, "google.com", { value: ethers.utils.parseEther("3") });
       const tokenId = 0;
+      await nftContract.connect(addr1).mint(tokenId, "google.com", { value: ethers.utils.parseEther("3") });
       expect(await nftContract.balanceOf(addr1.address)).to.equal(1);
       expect(await nftContract.ownerOf(tokenId)).to.equal(addr1.address);
     });
   });
 
+  it("test total mint", async function () {
+    const { nftContract, marketPlaceContract, marketPlace, owner, addr1 } = await loadFixture(deployTokenFixture);
+    for (let i = 0; i < 300; i++) {
+      const tokenId = i;
+      await nftContract.connect(addr1).mint(tokenId, "google.com", { value: ethers.utils.parseEther("3") });
+    }
+    expect(await nftContract.balanceOf(addr1.address)).to.equal(300);
+    try {
+      await expect((nftContract.connect(addr1).mint(300, "google.com", { value: ethers.utils.parseEther("3") }))).to.be.revertedWith("All NFTs have been minted");
+    } catch (e) {
+      console.log(e)
+    }
+
+  });
+
+
   describe(" check marketplace", function () {
     it("test list nft", async function () {
       const { nftContract, marketPlaceContract, marketPlace, owner, addr1 } = await loadFixture(deployTokenFixture);
-      await nftContract.mint(addr1.address, "google.com", { value: ethers.utils.parseEther("3") });
       const tokenId = 0;
+      await nftContract.connect(addr1).mint(tokenId, "google.com", { value: ethers.utils.parseEther("3") });
       expect(await nftContract.balanceOf(addr1.address)).to.equal(1);
       expect(await nftContract.ownerOf(tokenId)).to.equal(addr1.address);
       const listingPrice = await marketPlaceContract.listingPrice();
@@ -46,8 +62,8 @@ describe("deploy NFT Contract", function () {
 
     it("test delist nft", async function () {
       const { nftContract, marketPlaceContract, marketPlace, owner, addr1 } = await loadFixture(deployTokenFixture);
-      await nftContract.mint(addr1.address, "google.com", { value: ethers.utils.parseEther("3") });
       const tokenId = 0;
+      await nftContract.connect(addr1).mint(tokenId, "google.com", { value: ethers.utils.parseEther("3") });
       expect(await nftContract.balanceOf(addr1.address)).to.equal(1);
       expect(await nftContract.ownerOf(tokenId)).to.equal(addr1.address);
       const listingPrice = await marketPlaceContract.listingPrice();
@@ -63,8 +79,8 @@ describe("deploy NFT Contract", function () {
 
     it("test change price of listed item", async function () {
       const { nftContract, marketPlaceContract, marketPlace, owner, addr1 } = await loadFixture(deployTokenFixture);
-      await nftContract.mint(addr1.address, "google.com", { value: ethers.utils.parseEther("3") });
       const tokenId = 0;
+      await nftContract.connect(addr1).mint(tokenId, "google.com", { value: ethers.utils.parseEther("3") });
       expect(await nftContract.balanceOf(addr1.address)).to.equal(1);
       expect(await nftContract.ownerOf(tokenId)).to.equal(addr1.address);
       const listingPrice = await marketPlaceContract.listingPrice();
@@ -81,9 +97,10 @@ describe("deploy NFT Contract", function () {
 
     it("test buy item", async function () {
       const { nftContract, marketPlaceContract, marketPlace, owner, addr1, addr2 } = await loadFixture(deployTokenFixture);
-      await nftContract.mint(addr1.address, "google.com", { value: ethers.utils.parseEther("3") });
       const tokenId = 0;
       const itemId = 0;
+      await nftContract.connect(addr1).mint(tokenId, "google.com", { value: ethers.utils.parseEther("3") });
+      await nftContract.mint(1, "google.com", { value: ethers.utils.parseEther("3") });
       expect(await nftContract.balanceOf(addr1.address)).to.equal(1);
       expect(await nftContract.ownerOf(tokenId)).to.equal(addr1.address);
       const listingPrice = await marketPlaceContract.listingPrice();
