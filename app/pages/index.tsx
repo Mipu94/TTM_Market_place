@@ -5,6 +5,7 @@ import TopSellsers from "../components/top-sellers";
 import TodayPicks from "../components/today-picks";
 import PopularCollection from "../components/popular-collection";
 import CategoriesSlider from "../components/categories-slider";
+import CRoadmaps from "../components/roadmaps";
 
 export default function Home() {
   return (
@@ -13,6 +14,8 @@ export default function Home() {
       {/* <TopSellsers /> */}
       <TodayPicks />
       <MintedNFT />
+      {/* <CRoadmaps /> */}
+
       {/* <CategoriesSlider /> */}
       {/* <PopularCollection /> */}
       {/* <Features /> */}

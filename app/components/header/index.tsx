@@ -24,16 +24,20 @@ declare global {
 export default function Header() {
 
   const { changeNetwork, walletAddress, connect, isConnected } = useWebStore();
-  const chainId = useRef(typeof window !== 'undefined' ? window.ethereum.chainId : null)
+  const chainId = useRef(typeof window !== 'undefined' ? window.ethereum?.chainId : null)
+  if (chainId.current == null) {
+    chainId.current = process.env.NODE_ENV == "development" ? networks.dev.chainId : networks.prod.chainId
+  }
   const [isSticky, setIsSticky] = useState(false);
   const { theme, setTheme } = useTheme();
+
   useEffect(() => {
     window && window.scrollY >= 1 ? setIsSticky(true) : setIsSticky(false);
     window.onscroll = () => {
       window.scrollY >= 1 ? setIsSticky(
         true) : setIsSticky(false);
     };
-  });
+  }, []);
 
   return (
     <div
@@ -50,8 +54,8 @@ export default function Header() {
                     <Image
                       alt="app_logo"
                       src={`/static/assets/images/logo_${theme}.png`}
-                      width={133}
-                      height={56}
+                      width={168}
+                      height={60}
                       layout="fixed"
                       quality={100}
                       loading="eager"

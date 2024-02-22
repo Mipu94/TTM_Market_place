@@ -125,7 +125,7 @@ export default function NFTCard({ id, fullWidth, live }) {
               <div className={styles.nft_place_bid_wrap}>
                 <button className={styles.nft_place_bid_btn} onClick={mintNFT}>
                   <SiHiveBlockchain className="me-2" />
-                  <span>Mint Now</span>
+                  <span>{isConnected ? "Mint Now" : "Connect To Mint"}</span>
                 </button>
               </div>
               {/* <Link href={"/login"}>

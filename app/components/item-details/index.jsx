@@ -19,7 +19,8 @@ export default function ItemDetailsComponent({ id }) {
     let url = process.env.NEXT_PUBLIC_DOMAIN + "/api/nft/" + id;
     let res = await fetch(url);
     let data = await res.json();
-    if (!freeItems.includes(id)) data.owner = await NFTContract.ownerOf(id);
+    if (!freeItems.includes(id) && isConnected)
+      data.owner = await NFTContract.ownerOf(id);
     else data.owner = "Pending";
 
     setMetaData(data);
@@ -30,7 +31,6 @@ export default function ItemDetailsComponent({ id }) {
     if (isConnected) {
       try {
         let price = await NFTContract.mintingPrice();
-
         let tx = await NFTContract.mint(
           id,
           process.env.NEXT_PUBLIC_DOMAIN + "/nft/" + id,
@@ -127,7 +127,9 @@ export default function ItemDetailsComponent({ id }) {
                   {live && (
                     <a className={styles.place_bid_btn} onClick={mintNFT}>
                       <SiHiveBlockchain className="me-2" />
-                      <span>Mint Now</span>
+                      <span>
+                        {isConnected ? "Mint Now" : "Connect To Mint"}
+                      </span>
                     </a>
                   )}
                 </div>

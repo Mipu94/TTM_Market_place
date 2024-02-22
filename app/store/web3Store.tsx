@@ -62,15 +62,13 @@ export const useWebStore = create<Web3ModalStorage>((set, get) => ({
             return;
         }
         const provider = new ethers.providers.Web3Provider(window.ethereum);
-        const signer = provider.getSigner();
         const accounts = await provider.listAccounts();
         if (accounts.length == 0) {
             set({ NFTContract: TTM_NFT__factory.connect(addresses.nftAddress, provider), MarketplaceContract: Marketplace__factory.connect(addresses.marketplaceAddress, provider) });
             return set({ isConnected: false, walletAddress: null });
         }
-
+        const signer = provider.getSigner();
         set({ NFTContract: TTM_NFT__factory.connect(addresses.nftAddress, signer), MarketplaceContract: Marketplace__factory.connect(addresses.marketplaceAddress, signer) });
-
         set({ isConnected: true, walletAddress: accounts[0] });
         // check is develop env
 
@@ -136,8 +134,6 @@ export const Web3Provider = ({ children }: { children: React.ReactNode }) => {
         if (NFTContract != null) {
             try {
                 const provider = new ethers.providers.Web3Provider(window.ethereum);
-                // await provider.send("eth_requestAccounts", []);
-
 
                 let _totalsNFT = (await NFTContract.totalNFT()).toNumber();
                 if (totalsNFT != _totalsNFT) {
@@ -153,11 +149,9 @@ export const Web3Provider = ({ children }: { children: React.ReactNode }) => {
                     });
 
                     setMintedItems(_totalMinted);
-                    console.log(_totalMinted);
 
                     let notMint = [];
                     for (let i = 0; i < _totalsNFT; i++) {
-                        console.log();
                         if (!_totalMinted.includes(i)) {
                             notMint.push(i);
                         }
@@ -171,16 +165,22 @@ export const Web3Provider = ({ children }: { children: React.ReactNode }) => {
 
             }
         }
+        else {
+            let random = Array.from({ length: 300 }, (_, i) => i + 1);
+            random.sort(() => Math.random() - 0.5);
+            setFreeItems(random);
+        }
     }
 
-    // setInterval(checkMintedItems, 5000);
+
 
     useEffect(() => {
-        if (!window.ethereum)
+        if (!window.ethereum) {
             return;
 
-        init();
+        }
 
+        init();
     }, [ethers]);
 
     useEffect(() => {
