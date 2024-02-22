@@ -36,6 +36,12 @@ npm install -f
 npm run dev
 ```
 
+# faucet to an address
+
+```sh
+  npx hardhat --network localhost faucet <your address>
+```
+
 # Docker
 
 updating

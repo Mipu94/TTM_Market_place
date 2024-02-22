@@ -1,25 +1,33 @@
 const networks = {
+  // "dev": {
+  //   rpcUrls: ["http://127.0.0.1:8545/"],
+  //   chainId: "0x539",
+  //   chainName: "Localhost 8541",
+  //   nativeCurrency: {
+  //     name: "ETH",
+  //     symbol: "ETH",
+  //     decimals: 18
+  //   }
+  // },
   "dev": {
-    rpcUrls: ["http://127.0.0.1:8545/"],
-    chainId: "0x539",
-    chainName: "Localhost 8541",
+    rpcUrls: ["https://data-seed-prebsc-1-s1.bnbchain.org:8545"],
+    chainId: "0x61",
+    chainName: "BSC testnet",
     nativeCurrency: {
       name: "ETH",
       symbol: "ETH",
       decimals: 18
-    },
+    }
   },
   "prod": {
-    chainId: "0x89",
-    rpcUrls: ["https://rpc-mainnet.matic.network/"],
-    chainName: "Matic Mainnet",
+    rpcUrls: ["https://data-seed-prebsc-1-s1.bnbchain.org:8545"],
+    chainId: "0x61",
+    chainName: "BSC testnet",
     nativeCurrency: {
-      name: "MATIC",
-      symbol: "MATIC",
+      name: "ETH",
+      symbol: "ETH",
       decimals: 18
-    },
-    blockExplorerUrls: ["https://polygonscan.com/"]
-
+    }
   }
 }
 
