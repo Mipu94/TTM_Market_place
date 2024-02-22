@@ -13,7 +13,7 @@ export default function ContactPage() {
                 quality={100}
                 alt="contact_page_img"
                 layout="responsive"
-                width={100}
+                width={65}
                 height={100}
                 objectFit="cover"
                 objectPosition={"center"}
