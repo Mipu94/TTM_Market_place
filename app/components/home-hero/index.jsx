@@ -8,6 +8,8 @@ import Image from "next/image";
 
 export default function Hero() {
   const { theme, setTheme } = useTheme();
+  // let id = Math.floor(Math.random() * 2) + 1;
+  let id = 1;
 
   return (
     <section className={styles.home_page_hero_section}>
@@ -66,7 +68,7 @@ export default function Hero() {
                   width={354}
                   height={588}
                   layout="fixed"
-                  src={"/static/assets/images/concac.png"}
+                  src={`/static/assets/images/char${id}.png`}
                   alt="toy"
                   loading="eager"
                 />

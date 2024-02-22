@@ -54,7 +54,7 @@ export default function Header() {
                     <Image
                       alt="app_logo"
                       src={`/static/assets/images/logo_${theme}.png`}
-                      width={168}
+                      width={250}
                       height={60}
                       layout="fixed"
                       quality={100}
@@ -70,9 +70,9 @@ export default function Header() {
           </div>
           <div className="col-10 col-xl-4">
             <div className="d-flex justify-content-end align-items-center">
-              <button className="d-none d-sm-block">
+              {/* <button className="d-none d-sm-block">
                 <FiSearch />
-              </button>
+              </button> */}
               <div className="mx-3 mx-sm-4 d-none d-sm-block">
                 {
                   chainId.current != (process.env.NODE_ENV == "development" ? networks.dev.chainId : networks.prod.chainId) ?

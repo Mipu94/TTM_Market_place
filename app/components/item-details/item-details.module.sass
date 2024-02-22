@@ -6,9 +6,11 @@
         display: flex
         width: 100%
         height: 100%
-        border-radius: 20px 
+        border-radius: 20px
+        margin-right: 20px
+        padding-left: 20px
         overflow: hidden
-        min-height: 400px
+        min-height: 1000px
     .item_details
         .item_title
             font-size: 36px
@@ -57,7 +59,7 @@
             text-transform: capitalize
             border-radius: 1000px
             border: 2px solid variables.$white-text-color
-            color: variables.$white-text-color 
+            color: variables.$white-text-color
             transition: all variables.$hover-trans-d
             svg
                 font-size: 20px
@@ -65,21 +67,22 @@
                 margin-bottom: 2px
             &:hover
                 border-color: variables.$white-text-color
-                background: #fff 
-                color: variables.$purple-color 
+                background: #fff
+                color: variables.$purple-color
 
-html[data-theme='light'] 
+html[data-theme='light']
     .item_details_component
         .item_details
             .place_bid_btn
                 border-color: variables.$purple-color
-                color: variables.$purple-color 
+                color: variables.$purple-color
                 &:hover
-                    background: variables.$purple-color 
-                    color: variables.$white-text-color 
-                    
+                    background: variables.$purple-color
+                    color: variables.$white-text-color
+
 @media screen and ( min-width: 991px )
     .item_details_component
         .item_image_wrapper
-            min-height: 690px
-    
+            margin-right: 20px
+            margin-left: 20px
+            min-height: 800px

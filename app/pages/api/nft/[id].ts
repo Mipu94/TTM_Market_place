@@ -914,7 +914,7 @@ export default function handler(req: any, res: any) {
     let data = {
         // image: `${domain}/static/assets/images/nft-cards/${id}.jpg`,
         // image: "/_next/image?url=%2Fstatic%2Fassets%2Fimages%2Fnft-cards%2F4.jpg&w=3840&q=100",
-        image: `https://bafybeig3phu3eerivm63mnhubyf37i67i2oile76lomujftzjlyjy6d4zm.ipfs.nftstorage.link/Astro%20(${id}).png`,
+        image: `https://bafybeic4dwtvljanqccttmxkpn3sfc4nczj4wcwx3sg26grvntygkxb2lm.ipfs.nftstorage.link/NFT_Astro_${id}..png`,
         name: nftCollection[id].Name,
         designer: 'Minamoto',
         tokenId: id,

@@ -40,57 +40,33 @@ export default function Footer() {
               deleniti qui ex nisi earum reiciendis.
             </p>
           </div>
+          <div className="py-3 col-6 col-lg-4 col-xl-2"></div>
           <div className="py-3 col-6 col-lg-4 col-xl-2">
-            <p className={`${styles.footer_col_title} m-0 py-3`}>My Account</p>
+            <p className={`${styles.footer_col_title} m-0 py-3`}>To The Moon</p>
             <ul className={styles.footer_nav_list}>
               <li className={styles.footer_nav_list_item}>
-                <Link href="/authors">
-                  <a className={styles.footer_nav_link}>Authors</a>
+                <Link href="/minted">
+                  <a className={styles.footer_nav_link}>minted NFT</a>
                 </Link>
               </li>
-              <li className={styles.footer_nav_list_item}>
-                <Link href="/wallet-connect">
-                  <a className={styles.footer_nav_link}>Collection</a>
-                </Link>
-              </li>
-              <li className={styles.footer_nav_list_item}>
-                <Link href="/edit-profile">
-                  <a className={styles.footer_nav_link}>Author Profile</a>
-                </Link>
-              </li>
-              <li className={styles.footer_nav_list_item}>
-                <Link href="/create-item">
-                  <a className={styles.footer_nav_link}>Create Item</a>
-                </Link>
-              </li>
-            </ul>
-          </div>
-          <div className="py-3 col-6 col-lg-4 col-xl-2">
-            <p className={`${styles.footer_col_title} m-0 py-3`}>Resources</p>
-            <ul className={styles.footer_nav_list}>
-              <li className={styles.footer_nav_list_item}>
-                <Link href="/help-center">
-                  <a className={styles.footer_nav_link}>Help & Support</a>
-                </Link>
-              </li>
-              <li className={styles.footer_nav_list_item}>
-                <Link href="/auctions">
-                  <a className={styles.footer_nav_link}>Live Auctions</a>
-                </Link>
-              </li>
-              <li className={styles.footer_nav_list_item}>
-                <Link href="/item-details">
-                  <a className={styles.footer_nav_link}>Item Details</a>
-                </Link>
-              </li>
-            </ul>
-          </div>
-          <div className="py-3 col-6 col-lg-4 col-xl-2">
-            <p className={`${styles.footer_col_title} m-0 py-3`}>Company</p>
-            <ul className={styles.footer_nav_list}>
               <li className={styles.footer_nav_list_item}>
                 <Link href="/explore">
                   <a className={styles.footer_nav_link}>Explore</a>
+                </Link>
+              </li>
+              <li className={styles.footer_nav_list_item}>
+                <Link href="/roadmaps">
+                  <a className={styles.footer_nav_link}>Roadmaps</a>
+                </Link>
+              </li>
+            </ul>
+          </div>
+          <div className="py-3 col-6 col-lg-4 col-xl-2">
+            <p className={`${styles.footer_col_title} m-0 py-3`}>Recource</p>
+            <ul className={styles.footer_nav_list}>
+              <li className={styles.footer_nav_list_item}>
+                <Link href="/whitepaper">
+                  <a className={styles.footer_nav_link}>White Paper</a>
                 </Link>
               </li>
               <li className={styles.footer_nav_list_item}>
@@ -98,11 +74,11 @@ export default function Footer() {
                   <a className={styles.footer_nav_link}>Contact us</a>
                 </Link>
               </li>
-              <li className={styles.footer_nav_list_item}>
+              {/* <li className={styles.footer_nav_list_item}>
                 <Link href="/blog">
                   <a className={styles.footer_nav_link}>Our Blog</a>
                 </Link>
-              </li>
+              </li> */}
               <li className={styles.footer_nav_list_item}>
                 <Link href="/faq">
                   <a className={styles.footer_nav_link}>FAQ</a>

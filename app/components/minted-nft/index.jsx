@@ -14,7 +14,9 @@ export default function MintedNFT() {
   const [loadedItems, setLoadedItems] = useState([]);
 
   useEffect(async () => {
-    setLoadedItems(mintedItems.slice(0, 6));
+    setLoadedItems(
+      mintedItems.slice(0, mintedItems.length <= 6 ? mintedItems.length : 6)
+    );
   }, [mintedItems]);
 
   return (

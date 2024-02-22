@@ -58,11 +58,13 @@ export default function ItemDetailsComponent({ id }) {
       {metaData && (
         <div className="container py-5">
           <div className="row">
-            <div className=" py-5 col-12 col-lg-6">
+            <div className=" py-5 col-12 col-lg-4">
               <div className={styles.item_image_wrapper}>
                 <Image
                   alt="item_image"
                   layout="fill"
+                  // width={100}
+                  // height={100}
                   loading="eager"
                   quality={100}
                   src={metaData.image}
@@ -71,7 +73,8 @@ export default function ItemDetailsComponent({ id }) {
                 />
               </div>
             </div>
-            <div className="py-md-5 col-12 col-lg-6">
+            <div className="py-md-5 col-12 col-lg-1"></div>
+            <div className="py-md-5 col-12 col-lg-7">
               <div className={styles.item_details}>
                 <h3 className={styles.item_title}>{metaData.name}</h3>
                 <div className={`${styles.item_facts} pt-3 pb-2`}>
