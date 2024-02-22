@@ -4,7 +4,7 @@ COMPOSE_FILE = docker-compose.yml
 
 .PHONY: install
 install:
-	sudo docker network create $(PROJECT)_default || true
+	sudo docker network create $(PROJECT)_network || true
 	sudo docker-compose -f $(COMPOSE_FILE) -p $(PROJECT) up -d --build
 
 .PHONY: deploy

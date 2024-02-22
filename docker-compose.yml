@@ -3,7 +3,7 @@ version: "3.9"
 networks:
   default:
     external: true
-    name: reup_server_default
+    name: ${PROJECT}_network
 
 services:
   app:
