@@ -33,6 +33,7 @@ export default function WalletConnectPage() {
               name={_}
               id={i + 1}
               key={i}
+              icon={_}
             />
           ))}
         </div>

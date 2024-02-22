@@ -66,7 +66,7 @@ export default function Hero() {
                   width={354}
                   height={588}
                   layout="fixed"
-                  src={"/static/assets/images/char.png"}
+                  src={"/static/assets/images/concac.jpeg"}
                   alt="toy"
                   loading="eager"
                 />

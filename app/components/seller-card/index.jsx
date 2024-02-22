@@ -4,7 +4,15 @@ import Link from "next/link";
 import { BsCheck } from "react-icons/bs";
 import Image from "next/image";
 
-export default function SellerCard({ id, fullWidth, summary, own, seller }) {
+export default function SellerCard({
+  id,
+  fullWidth,
+  summary,
+  own,
+  seller,
+  metaData,
+}) {
+  var _metaData = JSON.parse(metaData);
   return (
     <div className={`my-3  ${fullWidth && "col-12 col-md-6 col-lg-4"}`}>
       <div className={`${styles.seller_card} ${summary && styles.summary}`}>
@@ -16,7 +24,13 @@ export default function SellerCard({ id, fullWidth, summary, own, seller }) {
             <Image
               alt="user_avatar"
               layout="fill"
-              src={`/static/assets/images/avatars/${id}.jpg`}
+              src={
+                own
+                  ? _metaData.owner == "Pending"
+                    ? `/static/assets/images/avatars/none.jpg`
+                    : `/static/assets/images/avatars/${(id % 6) + 1}.jpg`
+                  : "/static/assets/images/avatars/8.jpg"
+              }
               objectFit="cover"
               objectPosition={"center"}
             />
@@ -28,16 +42,18 @@ export default function SellerCard({ id, fullWidth, summary, own, seller }) {
               </span>
             )}
 
-            <Link href={"/authors"}>
-              <a className={styles.seller_details_link}>Rai Garraway</a>
+            <Link href={""}>
+              <a className={styles.seller_details_link}>
+                {own ? _metaData.owner : _metaData.designer}
+              </a>
             </Link>
 
-            {!summary && (
+            {/* {!summary && (
               <>
                 <span className={styles.seller_username}>@mmm066550</span>
                 <span className={styles.seller_earn}>23.3 ETH</span>
               </>
-            )}
+            )} */}
           </div>
         </div>
         {!summary && (

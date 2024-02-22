@@ -30,7 +30,8 @@ export default function Header() {
   useEffect(() => {
     window && window.scrollY >= 1 ? setIsSticky(true) : setIsSticky(false);
     window.onscroll = () => {
-      window.scrollY >= 1 ? setIsSticky(true) : setIsSticky(false);
+      window.scrollY >= 1 ? setIsSticky(
+        true) : setIsSticky(false);
     };
   });
 

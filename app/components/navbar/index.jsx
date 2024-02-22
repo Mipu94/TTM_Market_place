@@ -5,6 +5,7 @@ import Link from "next/link";
 const siteMap = [
   { id: 0, name: "home", route: "/" },
   { id: 1, name: "explore", route: "/explore" },
+  { id: 1, name: "Minted NFT", route: "/minted" },
   { id: 3, name: "contact", route: "/contact" },
   // { id: 3, name: "blog", route: "/blog" },
   // { id: 5, name: "my NFT", route: "/my-nft" },

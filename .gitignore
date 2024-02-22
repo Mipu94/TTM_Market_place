@@ -8,3 +8,4 @@ app/typechain
 typechain-types
 app/contracts
 typechain-types
+secrets.json

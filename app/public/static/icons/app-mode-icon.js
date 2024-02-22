@@ -13,4 +13,5 @@ export default function ThemeIcon() {
   if (isDark) return <CgSun />;
   if (isDark === false) return <CgMoon />;
   if (isDark === null) return <></>;
+  return <></>;
 }

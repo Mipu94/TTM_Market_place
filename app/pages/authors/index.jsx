@@ -12,7 +12,7 @@ import CollectionCard from "../../components/collection-card";
 export default function AuthorsPage() {
   return (
     <section className="authors_page py-5">
-      <div className="container py-4">
+      {/* <div className="container py-4">
         <div className="row align-items-center justify-content-center">
           <div className="col-12 col-sm-8 col-md-6 text-center">
             <h3 className="section_head">Top Seller</h3>
@@ -76,7 +76,7 @@ export default function AuthorsPage() {
         {[...Array(4)].map((_, i) => (
           <CollectionCard key={i} id={i + 1} cols={4} fullWidth={true} />
         ))}
-      </ViewRow>
+      </ViewRow> */}
     </section>
   );
 }
