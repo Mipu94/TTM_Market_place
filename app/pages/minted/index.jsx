@@ -33,13 +33,13 @@ export default function ExplorePage() {
   }, [mintedItems]);
 
   return (
-    <section className="explore_page py-5">
+    <section className="explore_page py-5" >
       <div className="container py-4">
         <div className="row align-items-center justify-content-center">
           <div className="col-12 col-sm-8 col-md-6 text-center">
             <h3 className="section_head">Minted NFTs</h3>
             <p className="section_sub_head">
-              These are the NFTs that have been minted by the users.
+              {mintedItems.length == 0 ? "No minted NFTs found" : "These are the NFTs that have been minted by the users."}
             </p>
           </div>
         </div>
