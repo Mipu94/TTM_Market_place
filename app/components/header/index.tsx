@@ -12,6 +12,9 @@ import { IoWallet } from "react-icons/io5";
 import { FiSearch } from "react-icons/fi";
 import { useWebStore } from "../../store/web3Store";
 import networks from "../../networks";
+import { GiHamburgerMenu } from "react-icons/gi";
+import { MdOutlineClose } from "react-icons/md";
+
 type Props = {};
 
 declare global {
@@ -22,6 +25,7 @@ declare global {
 }
 
 export default function Header() {
+  const [isOpenHam, setIsOpenHam] = useState(false);
 
   const { changeNetwork, walletAddress, connect, isConnected } = useWebStore();
   const chainId = useRef(typeof window !== 'undefined' ? window.ethereum?.chainId : null)
@@ -53,9 +57,9 @@ export default function Header() {
                   {theme && (
                     <Image
                       alt="app_logo"
-                      src={`/static/assets/images/logo_${theme}.png`}
-                      width={250}
-                      height={60}
+                      src={`/static/assets/images/TTM_${theme}.png`}
+                      width={235}
+                      height={30}
                       layout="fixed"
                       quality={100}
                       loading="eager"
@@ -68,11 +72,10 @@ export default function Header() {
           <div className="d-none d-xl-block col-6">
             <Navbar />
           </div>
+
           <div className="col-10 col-xl-4">
+
             <div className="d-flex justify-content-end align-items-center">
-              {/* <button className="d-none d-sm-block">
-                <FiSearch />
-              </button> */}
               <div className="mx-3 mx-sm-4 d-none d-sm-block">
                 {
                   chainId.current != (process.env.NODE_ENV == "development" ? networks.dev.chainId : networks.prod.chainId) ?
@@ -91,7 +94,9 @@ export default function Header() {
                     </div>
                 }
               </div>
+
               <button
+                style={{ marginRight: "4px" }}
                 className={styles.mode_toggle_btn}
                 onClick={() => {
                   setTheme(theme === "dark" ? "light" : "dark");
@@ -99,9 +104,24 @@ export default function Header() {
               >
                 <ThemeIcon />
               </button>
+
+              <button className={"d-block d-xl-none " + styles.mode_toggle_btn} onClick={() => setIsOpenHam(!isOpenHam)}>
+                {isOpenHam ?
+                  <MdOutlineClose></MdOutlineClose>
+                  :
+                  <GiHamburgerMenu ></GiHamburgerMenu>
+                }
+              </button>
+
             </div>
           </div>
+
+          <div>
+
+
+          </div>
         </div>
+        {isOpenHam && <Navbar />}
       </div>
     </div>
   );

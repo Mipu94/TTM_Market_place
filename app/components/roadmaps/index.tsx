@@ -3,9 +3,9 @@ import Image from "next/image";
 
 export default function CRoadmaps() {
     return (
-        <div className="row align-items-center justify-content-center">
+        <div className="row align-items-center justify-content-center" >
             <Image
-                width={800}
+                width={900}
                 height={450}
                 alt="roadmap_1"
                 src={"/static/assets/images/roadmap/roadmap_1.jpg"}

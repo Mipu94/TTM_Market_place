@@ -38,9 +38,9 @@ export default function Hero() {
                     Explore
                   </CtaButton>
                   <div className=" my-3 my-sm-0 mx-sm-3">
-                    <CtaButton href={"/create-item"}>
+                    <CtaButton href={"/white-paper"}>
                       <HiOutlineDocumentDuplicate className="me-2" />
-                      Create
+                      White Paper
                     </CtaButton>
                   </div>
                 </div>

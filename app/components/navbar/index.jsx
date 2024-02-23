@@ -14,18 +14,33 @@ const siteMap = [
 
 export default function Navbar() {
   return (
-    <nav className={`${styles.main_navbar_lg}`}>
-      <ul className={styles.navigation_list}>
-        {siteMap.map((el, i) => {
-          return (
-            <li key={i} className={styles.nav_item}>
-              <Link href={el.route}>
-                <a className={styles.nav_link}>{el.name}</a>
-              </Link>
-            </li>
-          );
-        })}
-      </ul>
-    </nav>
+    <div>
+      <nav className={`${styles.main_navbar_lg} d-none d-xl-block`} >
+        <ul className={styles.navigation_list}>
+          {siteMap.map((el, i) => {
+            return (
+              <li key={i} className={styles.nav_item}>
+                <Link href={el.route}>
+                  <a className={styles.nav_link}>{el.name}</a>
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
+      </nav>
+      <nav className={`${styles.main_navbar_mobile}  d-xl-none `} >
+        <ul className={styles.navigation_list_mobile}>
+          {siteMap.map((el, i) => {
+            return (
+              <li key={i} className={styles.nav_item_mobile}>
+                <Link href={el.route}>
+                  <a className={styles.nav_link_mobile}>{el.name}</a>
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
+      </nav>
+    </div>
   );
 }

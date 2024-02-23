@@ -26,9 +26,9 @@ export default function ContactPage() {
             <div className={styles.contact_form_area}>
               <h3 className={styles.form_heading}>Drop Up A Message</h3>
               <p className={styles.form_sub_heading}>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                Eveniet praesentium ipsa excepturi veritatis odit atque sed
-                vero, ducimus pariatur error culpa ab!
+                Contact us at <a href="mailto:support@whalescapital.io">
+                  support@whalescapital.io
+                </a> or fill the form below.
               </p>
               <form
                 className={styles.contact_form}

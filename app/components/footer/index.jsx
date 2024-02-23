@@ -6,7 +6,7 @@ import { useTheme } from "next-themes";
 import { RiSendPlane2Fill } from "react-icons/ri";
 import { BsTwitter } from "react-icons/bs";
 import { FiGithub } from "react-icons/fi";
-import { FaLinkedinIn } from "react-icons/fa";
+import { FaLinkedinIn, FaTelegram } from "react-icons/fa";
 import { AiFillFacebook, AiFillInstagram } from "react-icons/ai";
 import { SiUpwork } from "react-icons/si";
 
@@ -24,9 +24,9 @@ export default function Footer() {
                   {theme && (
                     <Image
                       alt="app_logo"
-                      src={`/static/assets/images/f_logo_${theme}.png`}
-                      width={133}
-                      height={56}
+                      src={`/static/assets/images/TTM_${theme}.png`}
+                      width={235}
+                      height={30}
                       layout="fixed"
                       quality={100}
                       loading="eager"
@@ -36,11 +36,9 @@ export default function Footer() {
               </Link>
             </div>
             <p className="m-0 pe-5">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi
-              deleniti qui ex nisi earum reiciendis.
+              <h4>Fly me <a href="https://twitter.com/Openttm">#Tothemoon</a></h4>
             </p>
           </div>
-          <div className="py-3 col-6 col-lg-4 col-xl-2"></div>
           <div className="py-3 col-6 col-lg-4 col-xl-2">
             <p className={`${styles.footer_col_title} m-0 py-3`}>To The Moon</p>
             <ul className={styles.footer_nav_list}>
@@ -54,16 +52,17 @@ export default function Footer() {
                   <a className={styles.footer_nav_link}>Explore</a>
                 </Link>
               </li>
+
+            </ul>
+          </div>
+          <div className="py-3 col-6 col-lg-4 col-xl-2">
+            <p className={`${styles.footer_col_title} m-0 py-3`}>Resources</p>
+            <ul className={styles.footer_nav_list}>
               <li className={styles.footer_nav_list_item}>
                 <Link href="/roadmaps">
                   <a className={styles.footer_nav_link}>Roadmaps</a>
                 </Link>
               </li>
-            </ul>
-          </div>
-          <div className="py-3 col-6 col-lg-4 col-xl-2">
-            <p className={`${styles.footer_col_title} m-0 py-3`}>Recource</p>
-            <ul className={styles.footer_nav_list}>
               <li className={styles.footer_nav_list_item}>
                 <Link href="/whitepaper">
                   <a className={styles.footer_nav_link}>White Paper</a>
@@ -106,64 +105,23 @@ export default function Footer() {
                 <li>
                   <a
                     className={styles.footer_social_link}
-                    href="https://github.com/mmm-066550"
+                    href="https://t.me/openttm"
                     target={"_blank"}
                     rel="noopener noreferrer"
                   >
-                    <FiGithub />
+                    <FaTelegram />
                   </a>
                 </li>
                 <li>
                   <a
                     className={styles.footer_social_link}
-                    href="https://www.linkedin.com/in/mmm066550"
-                    target={"_blank"}
-                    rel="noopener noreferrer"
-                  >
-                    <FaLinkedinIn />
-                  </a>
-                </li>
-                <li>
-                  <a
-                    className={styles.footer_social_link}
-                    href="https://www.fb.com/mmm066550"
-                    target={"_blank"}
-                    rel="noopener noreferrer"
-                  >
-                    <AiFillFacebook />
-                  </a>
-                </li>
-
-                <li>
-                  <a
-                    className={styles.footer_social_link}
-                    href="https://www.upwork.com/freelancers/~01cfdc33084883523e"
-                    target={"_blank"}
-                    rel="noopener noreferrer"
-                  >
-                    <SiUpwork />
-                  </a>
-                </li>
-                <li>
-                  <a
-                    className={styles.footer_social_link}
-                    href="https://www.instagram.com/moustapha.mm"
-                    target={"_blank"}
-                    rel="noopener noreferrer"
-                  >
-                    <AiFillInstagram />
-                  </a>
-                </li>
-                {/* <li>
-                  <a
-                    className={styles.footer_social_link}
-                    href="/"
+                    href="https://twitter.com/Openttm"
                     target={"_blank"}
                     rel="noopener noreferrer"
                   >
                     <BsTwitter />
                   </a>
-                </li> */}
+                </li>
               </ul>
             </div>
           </div>

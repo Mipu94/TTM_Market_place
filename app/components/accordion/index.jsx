@@ -10,24 +10,19 @@ const FAQs = [
   {
     question: "Customer support is available ?",
     answer:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias ratione ad aspernatur libero delectus dolorem, sit molestiae provident cum eligendi quod dolor quas quasi dignissimos nostrum id vel dolores dolorum.",
+      "Customer service work 24/7,  You can get supports by email support@whalescapital.io, with urgent case you can contact Telegram community group.",
   },
   {
     question: "How do I find my transaction hash?",
 
     answer:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias ratione ad aspernatur libero delectus dolorem, sit molestiae provident cum eligendi quod dolor quas quasi dignissimos nostrum id vel dolores dolorum.",
+      "All transactions will record direct on wallet transaction history by Blockchain explorer      ",
   },
   {
-    question: "What are gas fees on Axies?",
+    question: "What are gas fees on To The Moon?",
     answer:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias ratione ad aspernatur libero delectus dolorem, sit molestiae provident cum eligendi quod dolor quas quasi dignissimos nostrum id vel dolores dolorum.",
-  },
-  {
-    question: "What is the effective staking amount?",
-    answer:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias ratione ad aspernatur libero delectus dolorem, sit molestiae provident cum eligendi quod dolor quas quasi dignissimos nostrum id vel dolores dolorum.",
-  },
+      "To the moon use Moonrium help users have low fee and can change any NFTs chain.",
+  }
 ];
 
 export default function FAQAccordion() {
