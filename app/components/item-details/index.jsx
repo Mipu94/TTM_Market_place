@@ -58,13 +58,15 @@ export default function ItemDetailsComponent({ id }) {
       {metaData && (
         <div className="container py-5">
           <div className="row">
-            <div className=" py-5 col-12 col-lg-4">
+            <div className=" py-5 col-12 col-lg-4" style={{ padding: 0 }}>
               <div className={styles.item_image_wrapper}>
                 <Image
                   alt="item_image"
                   layout="fill"
-                  // width={100}
-                  // height={100}
+                  // sizes="100vw"
+                  // fill
+                  // width={"100%"}
+                  // height={"100%"}
                   loading="eager"
                   quality={100}
                   src={metaData.image}

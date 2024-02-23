@@ -80,9 +80,25 @@ html[data-theme='light']
                     background: variables.$purple-color
                     color: variables.$white-text-color
 
-@media screen and ( min-width: 991px )
+/*Ipad ngang(1024 x 768)*/
+@media screen and (max-width: 1024px)
+    .item_details_component
+    .item_image_wrapper
+        min-height: 800px
+/*Ipad dọc(768 x 1024)*/
+@media screen and (max-width: 768px)
     .item_details_component
         .item_image_wrapper
-            margin-right: 20px
-            margin-left: 20px
-            min-height: 800px
+            min-height: 600px
+
+/*Tablet nhỏ(480 x 640)*/
+@media screen and (max-width: 480px)
+    .item_details_component
+        .item_image_wrapper
+            min-height: 600px
+
+/*Iphone(480 x 640)*/
+@media screen and (max-width: 320px)
+
+/*Smart phone nhỏ*/
+@media screen and (max-width: 240px)
