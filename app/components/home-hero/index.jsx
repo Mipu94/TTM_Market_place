@@ -26,10 +26,10 @@ export default function Hero() {
               )}
               <div className="section_content pt-5">
                 <h2 className="heading">Discover, find,</h2>
-                <h2 className="heading gradient_text">Sell extraordinary</h2>
-                <h2 className="heading">Monster NFTs</h2>
+                <h2 className="heading gradient_text">Buy extraordinary</h2>
+                <h2 className="heading">Astronauts NFTs</h2>
                 <p className="sub_heading my-4">
-                  Marketplace For Monster Character Collections Non Fungible
+                  A Place For Astronauts Character Collections Non Fungible
                   Token NFTs
                 </p>
                 <div className="cta_btns_wrapper d-sm-flex">

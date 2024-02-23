@@ -16,7 +16,7 @@ function MyApp({ Component, pageProps }) {
     <>
       <Head>
         <title>TTM | TO THE MOON</title>
-        <meta name="description" content="to the moon with nextjs" />
+        <meta name="description" content="To The Moon" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <ThemeProvider defaultTheme={"dark"} enableSystem={false}>

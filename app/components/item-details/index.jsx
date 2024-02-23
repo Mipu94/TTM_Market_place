@@ -28,6 +28,7 @@ export default function ItemDetailsComponent({ id }) {
   }, [freeItems]);
 
   async function mintNFT() {
+    return alert("not ready to mint, please wait for the release.");
     if (isConnected) {
       try {
         let price = await NFTContract.mintingPrice();
