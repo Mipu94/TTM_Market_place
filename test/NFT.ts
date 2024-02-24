@@ -4,19 +4,14 @@ import { ethers } from "hardhat";
 
 describe("deploy NFT Contract", function () {
   async function deployTokenFixture() {
-    const [deployer] = await ethers.getSigners();
-
     const NFT = await ethers.getContractFactory("TTM_NFT");
     const marketPlace = await ethers.getContractFactory("Marketplace");
     const [owner, addr1, addr2] = await ethers.getSigners();
-    await deployer.sendTransaction({ to: owner.address, value: ethers.utils.parseEther("100") });
-    await deployer.sendTransaction({ to: addr1.address, value: ethers.utils.parseEther("100") });
-    await deployer.sendTransaction({ to: addr2.address, value: ethers.utils.parseEther("100") });
 
     const marketPlaceContract = await marketPlace.deploy(ethers.utils.parseEther("0.1"));
     await marketPlaceContract.deployed();
 
-    const nftContract = await NFT.deploy(marketPlaceContract.address);
+    const nftContract = await NFT.deploy("Astronauts NFT", "ASTR",);
     await nftContract.deployed();
     return { marketPlaceContract, marketPlace, nftContract, owner, addr1, addr2 };
   }

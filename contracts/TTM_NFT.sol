@@ -2,38 +2,77 @@
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/token/ERC721/extensions/IERC721Enumerable.sol";
-import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+//ERC721 
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+
+import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "hardhat/console.sol";
 
-contract TTM_NFT is ERC721URIStorage, Ownable {
+contract TTM_NFT is ERC721, Ownable {
     uint256 public totalMinted = 0;
     uint256 public mintingPrice = 3 ether;
     uint256 public totalNFT = 300;
+    string public baseURI;
 
-    struct Image {
-        string uri;
-    }
     uint256[] public mintedTokens;
     address nftMarketPlaceAddress;
+    IERC20 public erc20Token;
+    uint256 public airdropTokenAmount;
 
     constructor(
-        address _nftMarketPlaceAddress
-    ) ERC721("TO THE MOON NFT", "TTM_NFT") {
-        nftMarketPlaceAddress = _nftMarketPlaceAddress;
+        string memory _name,
+        string memory _symbol,
+        address _erc20Token,
+        uint256 _airdropTokenAmount,
+        string memory _baseURI
+    ) ERC721(_name, _symbol) {
+        baseURI = _baseURI;
+        erc20Token = IERC20(_erc20Token);
+        airdropTokenAmount = _airdropTokenAmount;
     }
 
-    function mint(uint256 _tokenId, string memory _tokenURI) external payable {
-        require(msg.value >= mintingPrice, "Insufficient funds sent");
-        require(totalMinted < totalNFT, "All NFTs have been minted");
-        require(!_exists(_tokenId), "Token already exists");
+    function mintIt(address _to, uint256 _tokenId) private {
+         // mint nft 
+        _safeMint(_to, _tokenId);
+        // airdrop token
+        erc20Token.transferFrom(address(this), _to, airdropTokenAmount);
 
-        _safeMint(msg.sender, _tokenId);
-        _setTokenURI(_tokenId, _tokenURI);
-        setApprovalForAll(nftMarketPlaceAddress, true);
         mintedTokens.push(_tokenId);
         totalMinted++;
     }
+
+    // public mint
+    function mint(uint256 _tokenId) external payable {
+       require(_tokenId > 9, "only Owner can use this tokenId");
+        require(msg.value >= mintingPrice, "Insufficient funds sent");
+        require(totalMinted < totalNFT, "All NFTs have been minted");
+        require(!_exists(_tokenId), "Token already exists");
+        // check balance of erc20Token in this account is enough to airdrop
+        require(erc20Token.balanceOf(address(this)) >= airdropTokenAmount, "Insufficient token amount in the contract");
+
+        // get money from user
+        payable(msg.sender).transfer( msg.value);
+
+        mintIt(msg.sender, _tokenId);
+    }
+
+    function giveAway(address _to, uint256 _tokenId) external onlyOwner {
+        require(_tokenId < 10, "Can't give away this tokenId");
+        require(!_exists(_tokenId), "Token already exists");
+        require(erc20Token.balanceOf(address(this)) >= airdropTokenAmount, "Insufficient token in your account");
+
+        mintIt(_to, _tokenId);
+    }
+
+    function approveNFTsMarketPlace() external onlyOwner {
+        if(nftMarketPlaceAddress != address(0))
+            setApprovalForAll(nftMarketPlaceAddress, true);
+    }
+    
+    function setBaseURI(string memory _baseURI) external onlyOwner {
+        baseURI = _baseURI;
+    }
+
 
     function setMintingPrice(uint256 _mintingPrice) external onlyOwner {
         mintingPrice = _mintingPrice;
