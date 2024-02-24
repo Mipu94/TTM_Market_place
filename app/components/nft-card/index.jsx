@@ -10,7 +10,8 @@ import { useState, useEffect } from "react";
 import fetch from "node-fetch";
 
 export default function NFTCard({ id, fullWidth, live }) {
-  const { NFTContract, walletAddress, isConnected } = useWebStore();
+  const { NFTContract, walletAddress, isConnected, mintNFT, connect } =
+    useWebStore();
   const [metaData, setMetaData] = useState(null);
   useEffect(async () => {
     let url = process.env.NEXT_PUBLIC_DOMAIN + "/api/nft/" + id;
@@ -19,42 +20,12 @@ export default function NFTCard({ id, fullWidth, live }) {
     setMetaData(data);
   }, []);
 
-  async function mintNFT() {
-    return alert("not ready to mint, please wait for the release.");
-
-    if (isConnected) {
-      try {
-        let price = await NFTContract.mintingPrice();
-
-        let tx = await NFTContract.mint(
-          id,
-          process.env.NEXT_PUBLIC_DOMAIN + "/nft/" + id,
-          {
-            value: price,
-          }
-        );
-
-        enqueueSnackbar("minted 1 NFT to " + tx.to, {
-          variant: "success",
-        });
-        setTimeout(() => {
-          window.location.reload();
-        }, 5000);
-      } catch (e) {
-        enqueueSnackbar(e.message, { variant: "error" });
-      }
-      await NFTContract.getAllMintedTokens();
-    } else {
-      console.log("wallet is not connected");
-    }
-  }
-
   return (
     <div className={`my-3 ${fullWidth && "col-12 col-md-6 col-lg-4 col-xl-3"}`}>
       {metaData && (
         <div className={styles.nft_card_styled}>
           <div className={styles.nft_img_wrapper}>
-            <Link href={`/item-details/${id}`}>
+            <Link href={"/item-details/[id]"} as={`/item-details/${id}`}>
               <a>
                 <Image
                   objectPosition={"center"}
@@ -125,7 +96,13 @@ export default function NFTCard({ id, fullWidth, live }) {
           {live && (
             <div className={`${styles.nft_info_row}`}>
               <div className={styles.nft_place_bid_wrap}>
-                <button className={styles.nft_place_bid_btn} onClick={mintNFT}>
+                <button
+                  className={styles.nft_place_bid_btn}
+                  onClick={() => {
+                    if (isConnected) mintNFT(id);
+                    else connect();
+                  }}
+                >
                   <SiHiveBlockchain className="me-2" />
                   <span>{isConnected ? "Mint Now" : "Connect To Mint"}</span>
                 </button>

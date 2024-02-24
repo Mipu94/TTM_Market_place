@@ -9,11 +9,11 @@ import { useTheme } from "next-themes";
 // ICONS
 import ThemeIcon from "../../public/static/icons/app-mode-icon";
 import { IoWallet } from "react-icons/io5";
-import { FiSearch } from "react-icons/fi";
 import { useWebStore } from "../../store/web3Store";
 import networks from "../../networks";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { MdOutlineClose } from "react-icons/md";
+import { enqueueSnackbar } from 'notistack';
 
 type Props = {};
 
@@ -43,15 +43,33 @@ export default function Header() {
     };
   }, []);
 
+  function clickWallet() {
+    if (chainId.current != (process.env.NODE_ENV == "development" ? networks.dev.chainId : networks.prod.chainId)) {
+      changeNetwork();
+    }
+    else {
+      if (!isConnected) connect()
+      else {
+        enqueueSnackbar("Connected", { variant: 'success' });
+
+      }
+    }
+
+  }
+
   return (
     <div
       className={`${styles.main_header_wrapper}  ${isSticky && styles.sticky_top
         }`}
     >
+
+
       <div className="container">
         <div className="row align-items-center">
           <div className="col-2">
-            <div className="app_brand_logo d-flex">
+            <div className="app_brand_logo d-flex" onClick={() => {
+              setTheme(theme === "dark" ? "light" : "dark");
+            }}>
               <Link href={"/"}>
                 <a className="d-inline-flex">
                   {theme && (
@@ -80,10 +98,8 @@ export default function Header() {
                 {
                   chainId.current != (process.env.NODE_ENV == "development" ? networks.dev.chainId : networks.prod.chainId) ?
                     <div onClick={changeNetwork}>
-                      <CtaButton href={""} >
-                        <IoWallet className="me-md-2" />
-                        <span className="d-none d-md-block"> {"Change network "}</span>
-                      </CtaButton>
+                      <IoWallet className="me-md-2" />
+                      <span className="d-none d-md-block"> {"Change network "}</span>
                     </div>
                     :
                     <div onClick={() => { if (!isConnected) connect() }}>
@@ -96,15 +112,23 @@ export default function Header() {
               </div>
 
               <button
-                style={{ marginRight: "4px" }}
-                className={styles.mode_toggle_btn}
+                className={styles.mode_toggle_btn + " d-none d-xl-block"}
                 onClick={() => {
                   setTheme(theme === "dark" ? "light" : "dark");
                 }}
               >
                 <ThemeIcon />
               </button>
+              <button
+                style={{ marginRight: "4px" }}
+                className={"d-block d-xl-none " + styles.mode_toggle_btn}
+                onClick={clickWallet}
+              >
+                <IoWallet className="me-md-2"
 
+
+                />
+              </button>
               <button className={"d-block d-xl-none " + styles.mode_toggle_btn} onClick={() => setIsOpenHam(!isOpenHam)}>
                 {isOpenHam ?
                   <MdOutlineClose></MdOutlineClose>

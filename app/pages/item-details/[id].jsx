@@ -1,6 +1,6 @@
 import React from "react";
 import ItemDetailsComponent from "../../components/item-details";
-import LiveAuctions from "../../components/minted-nft";
+import BuyNow from "../../components/buynow";
 import { useRouter } from "next/router";
 
 export default function ItemDetailsPage() {
@@ -10,7 +10,7 @@ export default function ItemDetailsPage() {
   return (
     <div className="item_details_page">
       <ItemDetailsComponent id={id} />
-      <LiveAuctions />
+      <BuyNow />
     </div>
   );
 }

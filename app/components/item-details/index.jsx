@@ -11,7 +11,8 @@ import { useState, useEffect } from "react";
 import { enqueueSnackbar } from "notistack";
 
 export default function ItemDetailsComponent({ id }) {
-  const { freeItems, isConnected, NFTContract } = useWebStore();
+  const { freeItems, isConnected, NFTContract, mintNFT, connect } =
+    useWebStore();
   const [metaData, setMetaData] = useState(null);
   const [live, setLive] = useState(false);
   useEffect(async () => {
@@ -27,46 +28,20 @@ export default function ItemDetailsComponent({ id }) {
     setLive(freeItems.includes(id));
   }, [freeItems]);
 
-  async function mintNFT() {
-    return alert("not ready to mint, please wait for the release.");
-    if (isConnected) {
-      try {
-        let price = await NFTContract.mintingPrice();
-        let tx = await NFTContract.mint(
-          id,
-          process.env.NEXT_PUBLIC_DOMAIN + "/nft/" + id,
-          {
-            value: price,
-          }
-        );
-
-        enqueueSnackbar("minted 1 NFT to " + tx.to, {
-          variant: "success",
-        });
-        setTimeout(() => {
-          window.location.reload();
-        }, 5000);
-      } catch (e) {
-        enqueueSnackbar(e.message, { variant: "error" });
-      }
-      await NFTContract.getAllMintedTokens();
-    } else {
-      console.log("wallet is not connected");
-    }
-  }
   return (
     <div className={styles.item_details_component}>
       {metaData && (
         <div className="container py-5">
           <div className="row">
-            <div className=" py-5 col-12 col-lg-4" style={{ padding: 0 }}>
+            <div className=" py-5 col-12 col-lg-6" style={{ padding: 0 }}>
               <div className={styles.item_image_wrapper}>
                 <Image
+                  style="visibility:visible;height:100%;position:relative;width:100%"
                   alt="item_image"
                   layout="fill"
                   // sizes="100vw"
                   // fill
-                  // width={"100%"}
+                  width={"100%"}
                   // height={"100%"}
                   loading="eager"
                   quality={100}
@@ -76,8 +51,7 @@ export default function ItemDetailsComponent({ id }) {
                 />
               </div>
             </div>
-            <div className="py-md-5 col-12 col-lg-1"></div>
-            <div className="py-md-5 col-12 col-lg-7">
+            <div className="py-md-5 col-12 col-lg-6">
               <div className={styles.item_details}>
                 <h3 className={styles.item_title}>{metaData.name}</h3>
                 <div className={`${styles.item_facts} pt-3 pb-2`}>
@@ -131,7 +105,13 @@ export default function ItemDetailsComponent({ id }) {
                 </div>
                 <div className="my-4">
                   {live && (
-                    <a className={styles.place_bid_btn} onClick={mintNFT}>
+                    <a
+                      className={styles.place_bid_btn}
+                      onClick={() => {
+                        if (isConnected) mintNFT(id);
+                        else connect();
+                      }}
+                    >
                       <SiHiveBlockchain className="me-2" />
                       <span>
                         {isConnected ? "Mint Now" : "Connect To Mint"}

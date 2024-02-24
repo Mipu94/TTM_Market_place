@@ -10,18 +10,18 @@ import { useWebStore } from "../../store/web3Store";
 import { useState, useEffect } from "react";
 
 export default function MintedNFT() {
-  const { isConnected, mintedItems } = useWebStore();
+  const { isConnected, freeItems } = useWebStore();
   const [loadedItems, setLoadedItems] = useState([]);
 
   useEffect(async () => {
     setLoadedItems(
-      mintedItems.slice(0, mintedItems.length <= 6 ? mintedItems.length : 6)
+      freeItems.slice(0, freeItems.length <= 6 ? freeItems.length : 6)
     );
-  }, [mintedItems]);
+  }, [freeItems]);
 
   return (
     <div className="live_aucations_slider pt-5">
-      {mintedItems.length != 0 && (
+      {freeItems.length != 0 && (
         <ViewRow link={"/minted"} title={"Minted NFTs"} g_0={true}>
           <Swiper
             data-swiper-autoplay="2000"

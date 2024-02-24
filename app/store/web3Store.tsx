@@ -27,7 +27,7 @@ interface Web3ModalStorage {
     setMintedItems: (mintedItems: number[]) => void;
     freeItems: number[];
     setFreeItems: (freeItems: number[]) => void;
-
+    mintNFT: (tokenId: number) => void;
 }
 
 
@@ -124,6 +124,35 @@ export const useWebStore = create<Web3ModalStorage>((set, get) => ({
     setTotalMinted: (totalMinted: number) => { console.log("setting", totalMinted); set({ totalMinted }) },
     setMintedItems: (mintedItems: number[]) => set({ mintedItems }),
     setFreeItems: (freeItems: number[]) => set({ freeItems }),
+    mintNFT: async (id: number) => {
+        // return alert("not ready to mint, please wait for the release.");
+        let isConnected = get().isConnected;
+        let NFTContract = get().NFTContract;
+        if (isConnected && NFTContract != null) {
+            try {
+                let price = await NFTContract?.mintingPrice();
+                let tx = await NFTContract?.mint(
+                    id,
+                    process.env.NEXT_PUBLIC_DOMAIN + "/nft/" + id,
+                    {
+                        value: price,
+                    }
+                );
+
+                enqueueSnackbar("minting 1 NFT to " + tx.to, {
+                    variant: "success",
+                });
+                setTimeout(() => {
+                    window.location.reload();
+                }, 5000);
+            } catch (e: any) {
+                enqueueSnackbar(e.message, { variant: "error" });
+            }
+            await NFTContract.getAllMintedTokens();
+        } else {
+            console.log("wallet is not connected");
+        }
+    }
 }));
 
 export const Web3Provider = ({ children }: { children: React.ReactNode }) => {

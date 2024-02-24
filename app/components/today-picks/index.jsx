@@ -15,7 +15,7 @@ export default function TodayPicks() {
     <div className="today_picks_wrapper">
       <ViewRow title={"Today's Picks"} link={"/explore"}>
         {loadedItems.map((i) => (
-          <NFTCard key={i} id={i + 1} fullWidth={true} live={true} />
+          <NFTCard key={i} id={i} fullWidth={true} live={true} />
         ))}
       </ViewRow>
     </div>

@@ -31,14 +31,14 @@ export default function MyNFTPage() {
         </div>
       </div>
       <ViewRow>
-        {[...Array(8)].map((_, i) => (
-          <NFTCard key={i} id={i + 1} fullWidth={true} />
+        {[...Array(8)].map((i) => (
+          <NFTCard key={i} id={i} fullWidth={true} />
         ))}
         {[...Array(8)].map((_, i) => (
-          <NFTCard key={i} id={i + 1} fullWidth={true} />
+          <NFTCard key={i} id={i} fullWidth={true} />
         ))}{" "}
         {[...Array(8)].map((_, i) => (
-          <NFTCard key={i} id={i + 1} fullWidth={true} />
+          <NFTCard key={i} id={i} fullWidth={true} />
         ))}
       </ViewRow>
     </section>
