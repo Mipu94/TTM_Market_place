@@ -50,7 +50,7 @@ export const useWebStore = create<Web3ModalStorage>((set, get) => ({
         });
         set({ walletAddress: await signer.getAddress() });
         // set({ NFTContract: TTM_NFT__factory.connect(addresses.nftAddress, provider), MarketplaceContract: Marketplace__factory.connect(addresses.marketplaceAddress, signer) });
-        set({ NFTContract: TTM_NFT__factory.connect(addresses.nftAddress, provider) });
+        set({ NFTContract: TTM_NFT__factory.connect(addresses.nftAddress, signer) });
         enqueueSnackbar("Connected", { variant: 'success' });
     },
     disconnect: () => set({ isConnected: false }),
@@ -109,17 +109,21 @@ export const useWebStore = create<Web3ModalStorage>((set, get) => ({
     isInit: false,
     walletAddress: null,
     changeNetwork: () => {
-        if (process.env.NODE_ENV === "development") {
-            window.ethereum.request({
-                method: "wallet_addEthereumChain",
-                params: [networks.dev]
-            });
-        }
-        else {
-            window.ethereum.request({
-                method: "wallet_addEthereumChain",
-                params: [networks.prod]
-            });
+        try {
+            if (process.env.NODE_ENV === "development") {
+                window.ethereum.request({
+                    method: "wallet_addEthereumChain",
+                    params: [networks.dev]
+                });
+            }
+            else {
+                window.ethereum.request({
+                    method: "wallet_addEthereumChain",
+                    params: [networks.prod]
+                });
+            }
+        } catch (e) {
+            console.log(e)
         }
     },
     signer: null,
@@ -173,7 +177,7 @@ export const useWebStore = create<Web3ModalStorage>((set, get) => ({
                     return enqueueSnackbar("ERC721: token already minted", { variant: "error" })
                 }
                 else {
-                    enqueueSnackbar(e.data.message, { variant: "error" });
+                    enqueueSnackbar(e.message, { variant: "error" });
                 }
             }
         } else {

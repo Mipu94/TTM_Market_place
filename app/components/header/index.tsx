@@ -14,6 +14,7 @@ import networks from "../../networks";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { MdOutlineClose } from "react-icons/md";
 import { enqueueSnackbar } from 'notistack';
+import { ethers } from 'ethers';
 
 type Props = {};
 
@@ -26,25 +27,32 @@ declare global {
 
 export default function Header() {
   const [isOpenHam, setIsOpenHam] = useState(false);
+  const [chainId, setChainId] = useState("");
 
   const { changeNetwork, walletAddress, connect, isConnected } = useWebStore();
-  const chainId = useRef(typeof window !== 'undefined' ? window.ethereum?.chainId : null)
-  if (chainId.current == null) {
-    chainId.current = process.env.NODE_ENV == "development" ? networks.dev.chainId : networks.prod.chainId
-  }
+
+
   const [isSticky, setIsSticky] = useState(false);
   const { theme, setTheme } = useTheme();
 
+  async function fetchChainId() {
+    var chainId = await window.ethereum.request({ method: "eth_chainId" });
+    chainId = ethers.utils.hexlify(chainId)
+    setChainId(chainId)
+  }
   useEffect(() => {
     window && window.scrollY >= 1 ? setIsSticky(true) : setIsSticky(false);
     window.onscroll = () => {
       window.scrollY >= 1 ? setIsSticky(
         true) : setIsSticky(false);
     };
+
+    fetchChainId();
+
   }, []);
 
-  function clickWallet() {
-    if (chainId.current != (process.env.NODE_ENV == "development" ? networks.dev.chainId : networks.prod.chainId)) {
+  async function clickWallet() {
+    if (chainId != (process.env.NODE_ENV == "development" ? networks.dev.chainId : networks.prod.chainId)) {
       changeNetwork();
     }
     else {
@@ -96,12 +104,12 @@ export default function Header() {
             <div className="d-flex justify-content-end align-items-center">
               <div className="mx-3 mx-sm-4 d-none d-md-block">
                 {
-                  chainId.current != (process.env.NODE_ENV == "development" ? networks.dev.chainId : networks.prod.chainId) ?
-                    <div onClick={changeNetwork}>
+                  chainId != (process.env.NODE_ENV == "development" ? networks.dev.chainId : networks.prod.chainId) ?
+                    <div onClick={clickWallet}>
                       <CtaButton href={""} >
 
                         <IoWallet className="me-md-2" />
-                        <span > {"Change network "}</span>
+                        <span > {"Change network"}</span>
                       </CtaButton>
 
                     </div>
@@ -124,6 +132,8 @@ export default function Header() {
               >
                 <ThemeIcon />
               </button>
+
+              {/* mobile wallet */}
               <button
                 style={{ marginRight: "4px", background: isConnected ? "#28B67A" : "linear-gradient(#E250E5 5.32%, #4B50E6 94.32%)" }}
                 className={"d-block d-md-none " + styles.mode_toggle_btn}

@@ -14,8 +14,8 @@ const networks = {
     chainId: "0x61",
     chainName: "BSC testnet",
     nativeCurrency: {
-      name: "BNB",
-      symbol: "BNB",
+      name: "TBNB",
+      symbol: "tBNB",
       decimals: 18
     }
   },
@@ -24,11 +24,11 @@ const networks = {
     chainId: "0x61",
     chainName: "BSC testnet",
     nativeCurrency: {
-      name: "ETH",
-      symbol: "ETH",
+      name: "TBNB",
+      symbol: "tBNB",
       decimals: 18
     }
-  }
+  },
 }
 
 export default networks;
