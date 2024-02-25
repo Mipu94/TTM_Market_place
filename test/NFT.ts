@@ -5,108 +5,72 @@ import { ethers } from "hardhat";
 describe("deploy NFT Contract", function () {
   async function deployTokenFixture() {
     const NFT = await ethers.getContractFactory("TTM_NFT");
-    const marketPlace = await ethers.getContractFactory("Marketplace");
     const [owner, addr1, addr2] = await ethers.getSigners();
+    const Token = await ethers.getContractFactory("TTM");
+    // owner holding 1k B token
+    const tokenContract = await Token.deploy(owner.address);
 
-    const marketPlaceContract = await marketPlace.deploy(ethers.utils.parseEther("0.1"));
-    await marketPlaceContract.deployed();
+    // const marketPlace = await ethers.getContractFactory("Marketplace");
+    // const marketPlaceContract = await marketPlace.deploy(ethers.utils.parseEther("0.1"));
 
-    const nftContract = await NFT.deploy("Astronauts NFT", "ASTR",);
+
+    const nftContract = await NFT.deploy("Astronauts NFT", "ASTR", tokenContract.address, "2000000000000000000000000000", "http://localhost/api/nft/", addr2.address);
     await nftContract.deployed();
-    return { marketPlaceContract, marketPlace, nftContract, owner, addr1, addr2 };
+    return { tokenContract, nftContract, owner, addr1, addr2 };
+    // return { tokenContract, marketPlaceContract, marketPlace, nftContract, owner, addr1, addr2 };
   }
 
-  describe("test mint nft", function () {
+  describe("test NFT", function () {
+    it("check public mint", async function () {
+      const { addr2, tokenContract, nftContract, owner, addr1 } = await loadFixture(deployTokenFixture);
+      await tokenContract.connect(owner).transfer(nftContract.address, ethers.utils.parseEther("600000000000"));
+      const tokenId = 10;
+      await expect(nftContract.connect(addr1).mint(tokenId, { value: ethers.utils.parseEther("3") })).to.be.revertedWith("Not allowed public mint");
+
+      await nftContract.connect(owner).setAllowPublicMint(true);
+      await nftContract.connect(addr1).mint(tokenId, { value: ethers.utils.parseEther("3") });
+      let uri = await nftContract.tokenURI(tokenId);
+      expect(uri == ("http://localhost/api/nft/" + tokenId))
+    });
+
+
     it("test mint", async function () {
-      const { nftContract, marketPlaceContract, marketPlace, owner, addr1 } = await loadFixture(deployTokenFixture);
-      const tokenId = 0;
-      await nftContract.connect(addr1).mint(tokenId, "google.com", { value: ethers.utils.parseEther("3") });
-      expect(await nftContract.balanceOf(addr1.address)).to.equal(1);
-      expect(await nftContract.ownerOf(tokenId)).to.equal(addr1.address);
+      const { addr2, tokenContract, nftContract, owner, addr1 } = await loadFixture(deployTokenFixture);
+      await tokenContract.connect(owner).transfer(nftContract.address, ethers.utils.parseEther("600000000000"));
+      await nftContract.connect(owner).setAllowPublicMint(true);
+
+      const tokenId = 10;
+
+      await nftContract.connect(addr1).mint(tokenId, { value: ethers.utils.parseEther("3") });
+      await nftContract.connect(addr1).mint(tokenId + 1, { value: ethers.utils.parseEther("3") });
+
+      // receive 6 BNB
+      expect(await ethers.provider.getBalance(addr2.address)).to.equal(ethers.utils.parseEther("10006"));
+
+      // receive 2 nft + 4B token
+      expect(await nftContract.balanceOf(addr1.address)).to.equal(2);
+      expect(await tokenContract.balanceOf(addr1.address)).to.equal(ethers.utils.parseEther("4000000000"));
     });
   });
 
-  it("test total mint", async function () {
-    const { nftContract, marketPlaceContract, marketPlace, owner, addr1 } = await loadFixture(deployTokenFixture);
-    for (let i = 0; i < 300; i++) {
-      const tokenId = i;
-      await nftContract.connect(addr1).mint(tokenId, "google.com", { value: ethers.utils.parseEther("3") });
-    }
-    expect(await nftContract.balanceOf(addr1.address)).to.equal(300);
-    try {
-      await expect((nftContract.connect(addr1).mint(300, "google.com", { value: ethers.utils.parseEther("3") }))).to.be.revertedWith("All NFTs have been minted");
-    } catch (e) {
-      console.log(e)
-    }
+  it("check token URI", async function () {
+    const { tokenContract, nftContract, owner, addr1 } = await loadFixture(deployTokenFixture);
+    await tokenContract.connect(owner).transfer(nftContract.address, ethers.utils.parseEther("600000000000"));
+    await nftContract.connect(owner).setAllowPublicMint(true);
+    const tokenId = 10;
+    await nftContract.connect(addr1).mint(tokenId, { value: ethers.utils.parseEther("3") });
+    await nftContract.connect(owner).setAllowPublicMint(true);
 
+    let uri = await nftContract.tokenURI(tokenId);
+    expect(uri == ("http://localhost/api/nft/" + tokenId))
   });
 
 
-  describe(" check marketplace", function () {
-    it("test list nft", async function () {
-      const { nftContract, marketPlaceContract, marketPlace, owner, addr1 } = await loadFixture(deployTokenFixture);
-      const tokenId = 0;
-      await nftContract.connect(addr1).mint(tokenId, "google.com", { value: ethers.utils.parseEther("3") });
-      expect(await nftContract.balanceOf(addr1.address)).to.equal(1);
-      expect(await nftContract.ownerOf(tokenId)).to.equal(addr1.address);
-      const listingPrice = await marketPlaceContract.listingPrice();
-      await nftContract.connect(addr1).approve(marketPlaceContract.address, tokenId);
-      await marketPlaceContract.connect(addr1).listNft(nftContract.address, tokenId, ethers.utils.parseEther("3"), { value: listingPrice });
-      expect(await nftContract.ownerOf(tokenId)).to.equal(marketPlaceContract.address);
+  describe(" check token transfered to owner", function () {
+    it("test transfer", async function () {
+      const { tokenContract, owner } = await loadFixture(deployTokenFixture);
+      let value = await tokenContract.balanceOf(owner.address)
+      expect(value).to.equal(ethers.utils.parseEther("1000000000000"));
     });
-
-    it("test delist nft", async function () {
-      const { nftContract, marketPlaceContract, marketPlace, owner, addr1 } = await loadFixture(deployTokenFixture);
-      const tokenId = 0;
-      await nftContract.connect(addr1).mint(tokenId, "google.com", { value: ethers.utils.parseEther("3") });
-      expect(await nftContract.balanceOf(addr1.address)).to.equal(1);
-      expect(await nftContract.ownerOf(tokenId)).to.equal(addr1.address);
-      const listingPrice = await marketPlaceContract.listingPrice();
-      await nftContract.connect(addr1).approve(marketPlaceContract.address, tokenId);
-      await marketPlaceContract.connect(addr1).listNft(nftContract.address, tokenId, ethers.utils.parseEther("3"), { value: listingPrice });
-      expect(await nftContract.ownerOf(tokenId)).to.equal(marketPlaceContract.address);
-      await marketPlaceContract.connect(addr1).delistNft(tokenId);
-      expect(await nftContract.ownerOf(tokenId)).to.equal(addr1.address);
-
-      // marketPlaceContract.connect(addr1).changeNFTPrice(tokenId, ethers.utils.parseEther("3"));
-
-    });
-
-    it("test change price of listed item", async function () {
-      const { nftContract, marketPlaceContract, marketPlace, owner, addr1 } = await loadFixture(deployTokenFixture);
-      const tokenId = 0;
-      await nftContract.connect(addr1).mint(tokenId, "google.com", { value: ethers.utils.parseEther("3") });
-      expect(await nftContract.balanceOf(addr1.address)).to.equal(1);
-      expect(await nftContract.ownerOf(tokenId)).to.equal(addr1.address);
-      const listingPrice = await marketPlaceContract.listingPrice();
-      await nftContract.connect(addr1).approve(marketPlaceContract.address, tokenId);
-      await marketPlaceContract.connect(addr1).listNft(nftContract.address, tokenId, ethers.utils.parseEther("3"), { value: listingPrice });
-      expect(await nftContract.ownerOf(tokenId)).to.equal(marketPlaceContract.address);
-      marketPlaceContract.connect(addr1).changeNFTPrice(tokenId, ethers.utils.parseEther("3"));
-
-      // // expect equal to the new price
-      const item = await marketPlaceContract.fetchAnItem(tokenId);
-      expect(item.price).to.equal(ethers.utils.parseEther("3"));
-
-    });
-
-    it("test buy item", async function () {
-      const { nftContract, marketPlaceContract, marketPlace, owner, addr1, addr2 } = await loadFixture(deployTokenFixture);
-      const tokenId = 0;
-      const itemId = 0;
-      await nftContract.connect(addr1).mint(tokenId, "google.com", { value: ethers.utils.parseEther("3") });
-      await nftContract.mint(1, "google.com", { value: ethers.utils.parseEther("3") });
-      expect(await nftContract.balanceOf(addr1.address)).to.equal(1);
-      expect(await nftContract.ownerOf(tokenId)).to.equal(addr1.address);
-      const listingPrice = await marketPlaceContract.listingPrice();
-      await nftContract.connect(addr1).approve(marketPlaceContract.address, tokenId);
-      await marketPlaceContract.connect(addr1).listNft(nftContract.address, itemId, ethers.utils.parseEther("3"), { value: listingPrice });
-
-      await marketPlaceContract.connect(addr2).buyNft(itemId, { value: ethers.utils.parseEther("3") });
-      expect(await nftContract.ownerOf(tokenId)).to.equal(addr2.address);
-    });
-
   });
-
-
 });

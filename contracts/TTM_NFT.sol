@@ -2,11 +2,8 @@
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
-//ERC721 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
-import "hardhat/console.sol";
 
 contract TTM_NFT is ERC721, Ownable {
     uint256 public totalMinted = 0;
@@ -18,24 +15,29 @@ contract TTM_NFT is ERC721, Ownable {
     address nftMarketPlaceAddress;
     IERC20 public erc20Token;
     uint256 public airdropTokenAmount;
+    address public finDepartMentWallet;
+    bool public allowPublicMint;
 
     constructor(
         string memory _name,
         string memory _symbol,
         address _erc20Token,
         uint256 _airdropTokenAmount,
-        string memory _baseURI
-    ) ERC721(_name, _symbol) {
-        baseURI = _baseURI;
+        string memory _baseUri,
+        address _finDepartMentWallet
+    ) ERC721(_name, _symbol) Ownable(_msgSender()) {
+        baseURI = _baseUri;
         erc20Token = IERC20(_erc20Token);
         airdropTokenAmount = _airdropTokenAmount;
+        finDepartMentWallet = _finDepartMentWallet;
+        allowPublicMint = false;
     }
 
     function mintIt(address _to, uint256 _tokenId) private {
-         // mint nft 
+        // mint nft
         _safeMint(_to, _tokenId);
         // airdrop token
-        erc20Token.transferFrom(address(this), _to, airdropTokenAmount);
+        erc20Token.transfer(_to, airdropTokenAmount);
 
         mintedTokens.push(_tokenId);
         totalMinted++;
@@ -43,36 +45,51 @@ contract TTM_NFT is ERC721, Ownable {
 
     // public mint
     function mint(uint256 _tokenId) external payable {
-       require(_tokenId > 9, "only Owner can use this tokenId");
+        require(allowPublicMint == true, "Not allowed public mint");
+        require(_tokenId > 9, "only Owner can use this tokenId");
         require(msg.value >= mintingPrice, "Insufficient funds sent");
         require(totalMinted < totalNFT, "All NFTs have been minted");
-        require(!_exists(_tokenId), "Token already exists");
+        require(_ownerOf(_tokenId) == address(0), "Token already exists");
         // check balance of erc20Token in this account is enough to airdrop
-        require(erc20Token.balanceOf(address(this)) >= airdropTokenAmount, "Insufficient token amount in the contract");
+        require(
+            erc20Token.balanceOf(address(this)) >= airdropTokenAmount,
+            "Insufficient token amount in the contract"
+        );
 
-        // get money from user
-        payable(msg.sender).transfer( msg.value);
+        // transfer money from user to fin wallet
+        payable(finDepartMentWallet).transfer(msg.value);
 
         mintIt(msg.sender, _tokenId);
     }
 
     function giveAway(address _to, uint256 _tokenId) external onlyOwner {
-        require(_tokenId < 10, "Can't give away this tokenId");
-        require(!_exists(_tokenId), "Token already exists");
-        require(erc20Token.balanceOf(address(this)) >= airdropTokenAmount, "Insufficient token in your account");
+        // require(_tokenId < 10, "Can't give away this tokenId");
+        require(_ownerOf(_tokenId) == address(0), "Token already exists");
+        require(
+            erc20Token.balanceOf(address(this)) >= airdropTokenAmount,
+            "Insufficient token in your account"
+        );
 
         mintIt(_to, _tokenId);
     }
 
-    function approveNFTsMarketPlace() external onlyOwner {
-        if(nftMarketPlaceAddress != address(0))
-            setApprovalForAll(nftMarketPlaceAddress, true);
-    }
-    
-    function setBaseURI(string memory _baseURI) external onlyOwner {
-        baseURI = _baseURI;
+    function setAllowPublicMint(bool value) external onlyOwner {
+        allowPublicMint = value;
     }
 
+    function approveNFTsMarketPlace() external onlyOwner {
+        if (nftMarketPlaceAddress != address(0))
+            setApprovalForAll(nftMarketPlaceAddress, true);
+    }
+
+    function setBaseURI(string memory _baseUri) external onlyOwner {
+        baseURI = _baseUri;
+    }
+
+    // overide baseURI
+    function _baseURI() internal view override returns (string memory) {
+        return baseURI;
+    }
 
     function setMintingPrice(uint256 _mintingPrice) external onlyOwner {
         mintingPrice = _mintingPrice;
