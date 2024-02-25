@@ -20,9 +20,13 @@ export default function ItemDetailsComponent({ id }) {
     let url = process.env.NEXT_PUBLIC_DOMAIN + "/api/nft/" + id;
     let res = await fetch(url);
     let data = await res.json();
-    if (!freeItems.includes(id) && isConnected)
-      data.owner = await NFTContract.ownerOf(id);
-    else data.owner = "Pending";
+    if (!freeItems.includes(id) && isConnected) {
+      let owner = await NFTContract.ownerOf(id);
+      data.owner = owner?.slice(0, 4) + "..." + owner?.slice(38);
+    } else {
+      if (isConnected) data.owner = "Pending";
+      else data.owner = "connect wallet to see owner";
+    }
 
     setMetaData(data);
     setLive(freeItems.includes(id));
