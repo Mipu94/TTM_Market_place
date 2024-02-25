@@ -53,7 +53,7 @@ describe("deploy NFT Contract", function () {
     });
   });
 
-  it("check token URI", async function () {
+  it("test token URI", async function () {
     const { tokenContract, nftContract, owner, addr1 } = await loadFixture(deployTokenFixture);
     await tokenContract.connect(owner).transfer(nftContract.address, ethers.utils.parseEther("600000000000"));
     await nftContract.connect(owner).setAllowPublicMint(true);
@@ -63,6 +63,16 @@ describe("deploy NFT Contract", function () {
 
     let uri = await nftContract.tokenURI(tokenId);
     expect(uri == ("http://localhost/api/nft/" + tokenId))
+  });
+
+  it("test give away", async function () {
+    const { tokenContract, nftContract, owner, addr1 } = await loadFixture(deployTokenFixture);
+    await tokenContract.connect(owner).transfer(nftContract.address, ethers.utils.parseEther("600000000000"));
+    const tokenId = 1;
+    await nftContract.connect(owner).giveAway(addr1.address, tokenId);
+    await nftContract.connect(owner).giveAway(addr1.address, tokenId + 1);
+    expect(await nftContract.balanceOf(addr1.address)).to.equal(2);
+    expect(await tokenContract.balanceOf(addr1.address)).to.equal(ethers.utils.parseEther("4000000000"));
   });
 
 
