@@ -7,7 +7,7 @@ import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 
 contract TTM_NFT is ERC721, Ownable {
     uint256 public totalMinted = 0;
-    uint256 public mintingPrice = 3 ether;
+    uint256 public mintingPrice = 0.01 ether;
     uint256 public totalNFT = 300;
     string public baseURI;
 
@@ -47,6 +47,7 @@ contract TTM_NFT is ERC721, Ownable {
     function mint(uint256 _tokenId) external payable {
         require(allowPublicMint == true, "Not allowed public mint");
         require(_tokenId > 9, "only Owner can use this tokenId");
+        require(_tokenId < 300, "Can't mint this token");
         require(msg.value >= mintingPrice, "Insufficient funds sent");
         require(totalMinted < totalNFT, "All NFTs have been minted");
         require(_ownerOf(_tokenId) == address(0), "Token already exists");

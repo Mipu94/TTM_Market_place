@@ -36,7 +36,8 @@ async function main() {
 
 
   const nft = await ethers.getContractFactory("TTM_NFT");
-  const nftContract = await nft.deploy("Astronauts NFT", "ASTR", tokenContract.address, "2000000000000000000000000000", "https://localhost.com/nft", "0x976EA74026E726554dB657fA54763abd0C3a0aa9");
+  let devWallet = deployer.address;
+  const nftContract = await nft.deploy("Astronauts NFT", "ASTR", tokenContract.address, "2000000000000000000000000000", "https://devv.openmoon.co/api/nft/", devWallet);
   await nftContract.deployed();
   await tokenContract.connect(deployer).transfer(nftContract.address, ethers.utils.parseEther("600000000000"));
   await tokenContract.deployed();
@@ -47,14 +48,12 @@ async function main() {
 
   // We also save the contract's artifacts and address in the frontend directory
   // saveFrontendFiles({ nftContract, nftName: "TTM_NFT", marketplaceContract, MarketplaceName: "Marketplace" });
-  saveFrontendFiles({ nftContract, nftName: "TTM_NFT" });
-
-
+  saveFrontendFiles({ nftContract, nftName: "TTM_NFT", tokenContract, tokenName: "TTM" });
 }
 
 // function saveFrontendFiles({ nftContract, nftName, marketplaceContract, MarketplaceName }
-function saveFrontendFiles({ nftContract, nftName }
-  : { nftContract: Contract, nftName: string }
+function saveFrontendFiles({ nftContract, nftName, tokenContract, tokenName }
+  : { nftContract: Contract, nftName: string, tokenContract: Contract, tokenName: string }
 ) {
   const fs = require("fs");
   const contractsDir = path.join(__dirname, "..", "app", "contracts");
@@ -66,21 +65,21 @@ function saveFrontendFiles({ nftContract, nftName }
   fs.writeFileSync(
     path.join(contractsDir, "contract-address.json"),
     // JSON.stringify({ nftAddress: nftContract.address, marketplaceAddress: marketplaceContract.address }, undefined, 2)
-    JSON.stringify({ nftAddress: nftContract.address }, undefined, 2)
+    JSON.stringify({ nftAddress: nftContract.address, tokenAddress: tokenContract.address }, undefined, 2)
   );
 
   const NFTArtifact = artifacts.readArtifactSync(nftName);
-  // const MarketplaceArtifact = artifacts.readArtifactSync(MarketplaceName);
+  const TokenArtifact = artifacts.readArtifactSync(tokenName);
 
   fs.writeFileSync(
     path.join(contractsDir, nftName + ".json"),
     JSON.stringify(NFTArtifact, null, 2)
   );
 
-  // fs.writeFileSync(
-  //   path.join(contractsDir, MarketplaceName + ".json"),
-  //   JSON.stringify(MarketplaceArtifact, null, 2)
-  // );
+  fs.writeFileSync(
+    path.join(contractsDir, tokenName + ".json"),
+    JSON.stringify(TokenArtifact, null, 2)
+  );
 }
 
 main()

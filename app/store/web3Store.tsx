@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { TTM_NFT__factory, Marketplace__factory, TTM_NFT, Marketplace } from "../typechain"
+import { TTM_NFT__factory, TTM_NFT } from "../typechain"
 import { ethers } from 'ethers';
 import { useEffect, useRef } from 'react';
 const addresses = require("../contracts/contract-address.json");
@@ -13,7 +13,7 @@ interface Web3ModalStorage {
     connect: () => void;
     disconnect: () => void;
     NFTContract: TTM_NFT | null;
-    MarketplaceContract: Marketplace | null;
+    // MarketplaceContract: Marketplace | null;
     init(): void;
     isInit: boolean;
     walletAddress: string | null;
@@ -49,12 +49,13 @@ export const useWebStore = create<Web3ModalStorage>((set, get) => ({
             isConnected: true
         });
         set({ walletAddress: await signer.getAddress() });
-        set({ NFTContract: TTM_NFT__factory.connect(addresses.nftAddress, provider), MarketplaceContract: Marketplace__factory.connect(addresses.marketplaceAddress, signer) });
+        // set({ NFTContract: TTM_NFT__factory.connect(addresses.nftAddress, provider), MarketplaceContract: Marketplace__factory.connect(addresses.marketplaceAddress, signer) });
+        set({ NFTContract: TTM_NFT__factory.connect(addresses.nftAddress, provider) });
         enqueueSnackbar("Connected", { variant: 'success' });
     },
     disconnect: () => set({ isConnected: false }),
     NFTContract: null,
-    MarketplaceContract: null,
+    // MarketplaceContract: null,
     init: async () => {
 
         if (!window.ethereum) {
@@ -64,22 +65,28 @@ export const useWebStore = create<Web3ModalStorage>((set, get) => ({
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const accounts = await provider.listAccounts();
         if (accounts.length == 0) {
-            set({ NFTContract: TTM_NFT__factory.connect(addresses.nftAddress, provider), MarketplaceContract: Marketplace__factory.connect(addresses.marketplaceAddress, provider) });
+            // set({ NFTContract: TTM_NFT__factory.connect(addresses.nftAddress, provider), MarketplaceContract: Marketplace__factory.connect(addresses.marketplaceAddress, provider) });
+            set({ NFTContract: TTM_NFT__factory.connect(addresses.nftAddress, provider) });
             return set({ isConnected: false, walletAddress: null });
         }
         const signer = provider.getSigner();
-        set({ NFTContract: TTM_NFT__factory.connect(addresses.nftAddress, signer), MarketplaceContract: Marketplace__factory.connect(addresses.marketplaceAddress, signer) });
+        // set({ NFTContract: TTM_NFT__factory.connect(addresses.nftAddress, signer), MarketplaceContract: Marketplace__factory.connect(addresses.marketplaceAddress, signer) });
+        set({ NFTContract: TTM_NFT__factory.connect(addresses.nftAddress, signer) });
         set({ isConnected: true, walletAddress: accounts[0] });
         // check is develop env
 
         const chainId = (await provider.getNetwork()).chainId;
         if (process.env.NODE_ENV === "development") {
-            if (chainId != parseInt(networks.dev.chainId, 16))
+            if (chainId != parseInt(networks.dev.chainId, 16)) {
+                set({ isConnected: false, walletAddress: null });
                 enqueueSnackbar("Dev Please connect to the correct network", { variant: 'error' });
+            }
         }
         else {
-            if (chainId != parseInt(networks.prod.chainId, 16))
+            if (chainId != parseInt(networks.prod.chainId, 16)) {
+                set({ isConnected: false, walletAddress: null });
                 enqueueSnackbar("Please connect to the correct network", { variant: 'error' });
+            }
         }
 
 
@@ -129,11 +136,13 @@ export const useWebStore = create<Web3ModalStorage>((set, get) => ({
         let isConnected = get().isConnected;
         let NFTContract = get().NFTContract;
         if (isConnected && NFTContract != null) {
+            const provider = new ethers.providers.Web3Provider(window.ethereum);
+            // console.log(await NFTContract.totalNFT())
+            console.log(NFTContract.mintingPrice())
             try {
                 let price = await NFTContract?.mintingPrice();
                 let tx = await NFTContract?.mint(
                     id,
-                    process.env.NEXT_PUBLIC_DOMAIN + "/nft/" + id,
                     {
                         value: price,
                     }
@@ -146,9 +155,27 @@ export const useWebStore = create<Web3ModalStorage>((set, get) => ({
                     window.location.reload();
                 }, 5000);
             } catch (e: any) {
-                enqueueSnackbar(e.message, { variant: "error" });
+                console.log(e)
+                if (e.message.includes("Not allowed public mint")) {
+                    return enqueueSnackbar("this NFT is not ready to mint, please wait for the release.", { variant: "error" });
+                }
+                if (e.message.includes("only Owner can use this tokenId")) {
+                    return enqueueSnackbar("only Owner can use this tokenId", { variant: "error" })
+                }
+                if (e.message.includes("Insufficient funds sent")) {
+                    return enqueueSnackbar("Insufficient funds sent", { variant: "error" })
+                }
+
+                if (e.message.includes("Can't mint this token")) {
+                    return enqueueSnackbar("Can't mint this token", { variant: "error" })
+                }
+                if (e.message.includes("ERC721: token already minted")) {
+                    return enqueueSnackbar("ERC721: token already minted", { variant: "error" })
+                }
+                else {
+                    enqueueSnackbar(e.data.message, { variant: "error" });
+                }
             }
-            await NFTContract.getAllMintedTokens();
         } else {
             console.log("wallet is not connected");
         }
@@ -162,7 +189,6 @@ export const Web3Provider = ({ children }: { children: React.ReactNode }) => {
     async function checkMintedItems() {
         if (NFTContract != null) {
             try {
-                const provider = new ethers.providers.Web3Provider(window.ethereum);
 
                 let _totalsNFT = (await NFTContract.totalNFT()).toNumber();
                 if (totalsNFT != _totalsNFT) {
@@ -180,7 +206,7 @@ export const Web3Provider = ({ children }: { children: React.ReactNode }) => {
                     setMintedItems(_totalMinted);
 
                     let notMint = [];
-                    for (let i = 0; i < _totalsNFT; i++) {
+                    for (let i = 10; i < _totalsNFT; i++) {
                         if (!_totalMinted.includes(i)) {
                             notMint.push(i);
                         }

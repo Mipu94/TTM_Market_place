@@ -94,25 +94,30 @@ export default function Header() {
           <div className="col-10 col-xl-4">
 
             <div className="d-flex justify-content-end align-items-center">
-              <div className="mx-3 mx-sm-4 d-none d-sm-block">
+              <div className="mx-3 mx-sm-4 d-none d-md-block">
                 {
                   chainId.current != (process.env.NODE_ENV == "development" ? networks.dev.chainId : networks.prod.chainId) ?
                     <div onClick={changeNetwork}>
-                      <IoWallet className="me-md-2" />
-                      <span className="d-none d-md-block"> {"Change network "}</span>
+                      <CtaButton href={""} >
+
+                        <IoWallet className="me-md-2" />
+                        <span > {"Change network "}</span>
+                      </CtaButton>
+
                     </div>
                     :
                     <div onClick={() => { if (!isConnected) connect() }}>
                       <CtaButton href={""} >
                         <IoWallet className="me-md-2" />
-                        <span className="d-none d-md-block"> {isConnected ? walletAddress?.slice(0, 4) + "..." + walletAddress?.slice(38) : "Wallet connect"}</span>
+                        <span > {isConnected ? walletAddress?.slice(0, 4) + "..." + walletAddress?.slice(38) : "Wallet connect"}</span>
                       </CtaButton>
                     </div>
                 }
               </div>
 
               <button
-                className={styles.mode_toggle_btn + " d-none d-xl-block"}
+                className={styles.mode_toggle_btn + " d-none d-md-block"}
+                style={{ marginRight: "4px" }}
                 onClick={() => {
                   setTheme(theme === "dark" ? "light" : "dark");
                 }}
@@ -120,14 +125,11 @@ export default function Header() {
                 <ThemeIcon />
               </button>
               <button
-                style={{ marginRight: "4px" }}
-                className={"d-block d-xl-none " + styles.mode_toggle_btn}
+                style={{ marginRight: "4px", background: isConnected ? "#28B67A" : "linear-gradient(#E250E5 5.32%, #4B50E6 94.32%)" }}
+                className={"d-block d-md-none " + styles.mode_toggle_btn}
                 onClick={clickWallet}
               >
-                <IoWallet className="me-md-2"
-
-
-                />
+                <IoWallet className="me-md-2" />
               </button>
               <button className={"d-block d-xl-none " + styles.mode_toggle_btn} onClick={() => setIsOpenHam(!isOpenHam)}>
                 {isOpenHam ?

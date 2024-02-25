@@ -10,7 +10,7 @@ export default function ItemDetailsPage() {
   return (
     <div className="item_details_page">
       <ItemDetailsComponent id={id} />
-      <BuyNow />
+      {/* <BuyNow /> */}
     </div>
   );
 }

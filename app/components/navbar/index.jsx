@@ -15,7 +15,7 @@ const siteMap = [
 export default function Navbar() {
   return (
     <div>
-      <nav className={`${styles.main_navbar_lg} d-none d-xl-block`} >
+      <nav className={`${styles.main_navbar_lg} d-none d-xl-block`}>
         <ul className={styles.navigation_list}>
           {siteMap.map((el, i) => {
             return (
@@ -28,7 +28,7 @@ export default function Navbar() {
           })}
         </ul>
       </nav>
-      <nav className={`${styles.main_navbar_mobile}  d-xl-none `} >
+      <nav className={`${styles.main_navbar_mobile}  d-xl-none`}>
         <ul className={styles.navigation_list_mobile}>
           {siteMap.map((el, i) => {
             return (
