@@ -7,7 +7,7 @@ export default function ContactPage() {
     <div className={styles.contact_page}>
       <div className="container py-5">
         <div className="row align-items-center">
-          <div className="py-4  col-12 col-md-6">
+          <div className="py-4 col-12 col-md-6 d-none d-xl-block">
             <div className={styles.img_container}>
               <Image
                 quality={100}

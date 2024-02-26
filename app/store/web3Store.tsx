@@ -40,6 +40,12 @@ export const useWebStore = create<Web3ModalStorage>((set, get) => ({
             enqueueSnackbar("Please install MetaMask Wallet", { variant: 'error' });
             return;
         }
+        var chainId = await window.ethereum.request({ method: "eth_chainId" });
+        // chainId = ethers.utils.hexlify(chainId)
+        if (chainId != (process.env.NODE_ENV == "development" ? networks.dev.chainId : networks.prod.chainId)) {
+            let changeNetwork = get().changeNetwork;
+            return changeNetwork()
+        }
 
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         await provider.send("eth_requestAccounts", []);
@@ -62,6 +68,22 @@ export const useWebStore = create<Web3ModalStorage>((set, get) => ({
             enqueueSnackbar("Please install MetaMask Wallet", { variant: 'error' });
             return;
         }
+
+        window.ethereum.on('accountsChanged', (accounts: string[]) => {
+            if (accounts.length > 0) {
+                set({ isConnected: true, walletAddress: accounts[0] });
+                // enqueueSnackbar("Connected", { variant: 'success' });
+            } else {
+                set({ isConnected: false, walletAddress: null });
+                enqueueSnackbar("Disconnected", { variant: 'error' });
+            }
+        });
+
+        window.ethereum.on('chainChanged', (chainId: string) => {
+            window.location.reload();
+        });
+
+
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const accounts = await provider.listAccounts();
         if (accounts.length == 0) {
@@ -88,23 +110,6 @@ export const useWebStore = create<Web3ModalStorage>((set, get) => ({
                 enqueueSnackbar("Please connect to the correct network", { variant: 'error' });
             }
         }
-
-
-        window.ethereum.on('accountsChanged', (accounts: string[]) => {
-            if (accounts.length > 0) {
-                set({ isConnected: true, walletAddress: accounts[0] });
-                // enqueueSnackbar("Connected", { variant: 'success' });
-            } else {
-                set({ isConnected: false, walletAddress: null });
-                enqueueSnackbar("Disconnected", { variant: 'error' });
-            }
-        });
-
-        window.ethereum.on('chainChanged', (chainId: string) => {
-            window.location.reload();
-        });
-
-
     },
     isInit: false,
     walletAddress: null,
@@ -173,8 +178,11 @@ export const useWebStore = create<Web3ModalStorage>((set, get) => ({
                 if (e.message.includes("Can't mint this token")) {
                     return enqueueSnackbar("Can't mint this token", { variant: "error" })
                 }
-                if (e.message.includes("ERC721: token already minted")) {
-                    return enqueueSnackbar("ERC721: token already minted", { variant: "error" })
+                if (e.message.includes("Token already minted")) {
+                    return enqueueSnackbar("Token already minted", { variant: "error" })
+                }
+                if (e.message.includes("user rejected transaction ")) {
+                    // return enqueueSnackbar("user rejected transaction ", { variant: "error" })
                 }
                 else {
                     enqueueSnackbar(e.message, { variant: "error" });

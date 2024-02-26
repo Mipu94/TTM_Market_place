@@ -36,9 +36,11 @@ export default function Header() {
   const { theme, setTheme } = useTheme();
 
   async function fetchChainId() {
-    var chainId = await window.ethereum.request({ method: "eth_chainId" });
-    chainId = ethers.utils.hexlify(chainId)
-    setChainId(chainId)
+    try {
+      var chainId = await window.ethereum.request({ method: "eth_chainId" });
+      // chainId = ethers.utils.hexlify(chainId)
+      setChainId(chainId)
+    } catch (e) { }
   }
   useEffect(() => {
     window && window.scrollY >= 1 ? setIsSticky(true) : setIsSticky(false);
@@ -135,7 +137,7 @@ export default function Header() {
 
               {/* mobile wallet */}
               <button
-                style={{ marginRight: "4px", background: isConnected ? "#28B67A" : "linear-gradient(#E250E5 5.32%, #4B50E6 94.32%)" }}
+                style={isConnected ? { marginRight: "4px", background: "#28B67A" } : { marginRight: "4px" }}
                 className={"d-block d-md-none " + styles.mode_toggle_btn}
                 onClick={clickWallet}
               >

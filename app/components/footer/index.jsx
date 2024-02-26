@@ -24,7 +24,7 @@ export default function Footer() {
                   {theme && (
                     <Image
                       alt="app_logo"
-                      src={`/static/assets/images/TTM_${theme}.png`}
+                      src={`/static/assets/images/TTM_dark.png`}
                       width={235}
                       height={30}
                       layout="fixed"
