@@ -2,7 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ["localhost", "nftstorage.link", "bafybeic4dwtvljanqccttmxkpn3sfc4nczj4wcwx3sg26grvntygkxb2lm.ipfs.nftstorage.link"],
+    domains: ["localhost", "nftstorage.link", "bafybeigx5pvwjir6vovbnvtyuqrvv2h2bxki2jljg3z4n6koroeuxm6rza.ipfs.nftstorage.link"],
   },
 
 };
