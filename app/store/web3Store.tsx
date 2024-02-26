@@ -169,7 +169,6 @@ export const useWebStore = create<Web3ModalStorage>((set, get) => ({
                     window.location.reload();
                 }, 5000);
             } catch (e: any) {
-                console.log(e)
                 if (e.message.includes("Not allowed public mint")) {
                     return enqueueSnackbar("this NFT is not ready to mint, please wait for the release.", { variant: "error" });
                 }
@@ -186,12 +185,17 @@ export const useWebStore = create<Web3ModalStorage>((set, get) => ({
                 if (e.message.includes("Token already minted")) {
                     return enqueueSnackbar("Token already minted", { variant: "error" })
                 }
+                if (e.data?.message?.includes("insufficient funds for gas")) {
+                    return enqueueSnackbar("Insufficient funds for gas", { variant: "error" })
+                }
+
                 if (e.message.includes("user rejected transaction ")) {
                     // return enqueueSnackbar("user rejected transaction ", { variant: "error" })
                 }
                 else {
                     enqueueSnackbar(e.message, { variant: "error" });
                 }
+                console.log(e)
             }
         } else {
             console.log("wallet is not connected");
@@ -228,7 +232,7 @@ export const Web3Provider = ({ children }: { children: React.ReactNode }) => {
                             notMint.push(i);
                         }
                     }
-                    console.log(_totalMinted);
+
 
                     setFreeItems(notMint);
                 }
