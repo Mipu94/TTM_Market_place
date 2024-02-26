@@ -28,7 +28,7 @@ export default function Hero() {
               <div className="section_content pt-5">
                 <Countdown
 
-                  date={new Date('2024-02-28T12:00:00+07:00')}
+                  date={new Date('2024-02-28T20:00:00+07:00')}
                   intervalDelay={0}
                   precision={1}
                   renderer={({ days, hours, minutes, seconds, completed }) => {
