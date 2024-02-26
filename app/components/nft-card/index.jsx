@@ -62,9 +62,7 @@ export default function NFTCard({ id, fullWidth, live }) {
                   width={45}
                   height={45}
                   layout="fixed"
-                  src={`/static/assets/images/avatars/${
-                    live ? "none" : id % 8
-                  }.jpg`}
+                  src={`/static/assets/images/avatars/${live ? "none" : id % 8}.jpg`}
                   quality={100}
                 />
               </div>

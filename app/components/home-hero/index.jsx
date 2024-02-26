@@ -5,6 +5,7 @@ import { IoIosRocket } from "react-icons/io";
 import { HiOutlineDocumentDuplicate } from "react-icons/hi";
 import { useTheme } from "next-themes";
 import Image from "next/image";
+import Countdown from 'react-countdown';
 
 export default function Hero() {
   const { theme, setTheme } = useTheme();
@@ -25,8 +26,22 @@ export default function Hero() {
                 />
               )}
               <div className="section_content pt-5">
-                <h2 className="heading">Discover, find,</h2>
-                <h2 className="heading gradient_text">Buy extraordinary</h2>
+                <Countdown
+
+                  date={new Date('2024-02-28T12:00:00+07:00')}
+                  intervalDelay={0}
+                  precision={1}
+                  renderer={({ days, hours, minutes, seconds, completed }) => {
+                    if (completed) {
+                      return <h2 className="heading">All NFTs is Ready to Mints!</h2>
+                    } return (<><h2 className="heading">Ready to mint after <br /></h2><h3> {days} day, {hours} hours, {minutes} mins, {seconds}s</h3></>)
+                  }}
+
+                ></Countdown>
+
+
+
+                <h2 className="heading gradient_text" style={{ marginTop: 20 }}>Buy extraordinary</h2>
                 <h2 className="heading">Astronauts NFTs</h2>
                 <p className="sub_heading my-4">
                   A Place For Astronauts Character Collections Non Fungible
@@ -75,8 +90,8 @@ export default function Hero() {
               </div>
             </div>
           </div>
-        </div>
-      </div>
-    </section>
+        </div >
+      </div >
+    </section >
   );
 }

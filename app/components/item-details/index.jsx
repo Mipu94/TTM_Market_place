@@ -16,7 +16,6 @@ export default function ItemDetailsComponent({ id }) {
   const [metaData, setMetaData] = useState(null);
   const [live, setLive] = useState(false);
   useEffect(async () => {
-    if (!id) return;
     let url = process.env.NEXT_PUBLIC_DOMAIN + "/api/nft/" + id;
     let res = await fetch(url);
     let data = await res.json();
@@ -99,9 +98,9 @@ export default function ItemDetailsComponent({ id }) {
                     </div>
                     <div className="my-3 col-12 col-sm-6">
                       <div className={styles.item_fact}>
-                        <span className={styles.item_fact_label}>Status</span>
+                        <span className={styles.item_fact_label}>Token ID</span>
                         <span className={styles.item_fact_value}>
-                          {live ? "Mintable" : "Not Mintable"}
+                          {id}
                         </span>
                       </div>
                     </div>
