@@ -115,6 +115,11 @@ export const useWebStore = create<Web3ModalStorage>((set, get) => ({
     walletAddress: null,
     changeNetwork: () => {
         try {
+            if (!window.ethereum) {
+                enqueueSnackbar("Please install MetaMask Wallet", { variant: 'error' });
+                return;
+            }
+
             if (process.env.NODE_ENV === "development") {
                 window.ethereum.request({
                     method: "wallet_addEthereumChain",
