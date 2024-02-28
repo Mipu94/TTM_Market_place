@@ -185,8 +185,8 @@ export const useWebStore = create<Web3ModalStorage>((set, get) => ({
                 if (e.message.includes("Token already minted")) {
                     return enqueueSnackbar("Token already minted", { variant: "error" })
                 }
-                if (e.data?.message?.includes("insufficient funds for gas")) {
-                    return enqueueSnackbar("Insufficient funds for gas", { variant: "error" })
+                if (e.data?.message?.includes("insufficient funds")) {
+                    return enqueueSnackbar("Insufficient funds.", { variant: "error" })
                 }
 
                 if (e.message.includes("user rejected transaction ")) {
