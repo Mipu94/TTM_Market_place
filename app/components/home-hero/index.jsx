@@ -6,8 +6,10 @@ import { HiOutlineDocumentDuplicate } from "react-icons/hi";
 import { useTheme } from "next-themes";
 import Image from "next/image";
 import Countdown from 'react-countdown';
+import { useWebStore } from "../../store/web3Store";
 
 export default function Hero() {
+  const { mintedItems } = useWebStore();
   const { theme, setTheme } = useTheme();
   // let id = Math.floor(Math.random() * 2) + 1;
   let id = 1;
@@ -33,8 +35,8 @@ export default function Hero() {
                   precision={1}
                   renderer={({ days, hours, minutes, seconds, completed }) => {
                     if (completed) {
-                      return <h2 className="heading">All NFTs are Ready to Mint!</h2>
-                    } return (<><h2 className="heading">All NFTs are ready to mint!<br/></h2><h4><i>New NFT price is 2BNB and will update after {hours} hours, {minutes} mins, {seconds}s</i></h4></>)
+                      return <h2 className="heading">Minted NFTs: {mintedItems.length}/ 300</h2>
+                    } return (<><h2 className="heading">Ready to mint after <br /></h2><h3> {days} day, {hours} hours, {minutes} mins, {seconds}s</h3></>)
                   }}
 
                 ></Countdown>
