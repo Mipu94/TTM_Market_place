@@ -88,7 +88,7 @@ export default function NFTCard({ id, fullWidth, live }) {
             </div>
             <div className={styles.nft_bid_wrapper}>
               <span className={styles.current_bid}>Price</span>
-              <span className={styles.current_bid_value}>3 BNB</span>
+              <span className={styles.current_bid_value}>{(new Date('2024-02-29T20:00:00+07:00') > new Date()) ? "3 BNB" : "2 BNB"}</span>
             </div>
           </div>
           {live && (

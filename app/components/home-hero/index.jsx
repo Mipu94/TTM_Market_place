@@ -28,13 +28,13 @@ export default function Hero() {
               <div className="section_content pt-5">
                 <Countdown
 
-                  date={new Date('2024-02-28T20:00:00+07:00')}
+                  date={new Date('2024-02-29T20:00:00+07:00')}
                   intervalDelay={0}
                   precision={1}
                   renderer={({ days, hours, minutes, seconds, completed }) => {
                     if (completed) {
-                      return <h2 className="heading">All NFTs is Ready to Mints!</h2>
-                    } return (<><h2 className="heading">Ready to mint after <br /></h2><h3> {days} day, {hours} hours, {minutes} mins, {seconds}s</h3></>)
+                      return <h2 className="heading">All NFTs are Ready to Mint!</h2>
+                    } return (<><h2 className="heading">All NFTs are ready to mint!<br/></h2><h4><i>New NFT price is 2BNB and will update after {hours} hours, {minutes} mins, {seconds}s</i></h4></>)
                   }}
 
                 ></Countdown>

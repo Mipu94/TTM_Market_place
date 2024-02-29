@@ -93,7 +93,7 @@ export default function ItemDetailsComponent({ id }) {
                     <div className="my-3 col-12 col-sm-6">
                       <div className={styles.item_fact}>
                         <span className={styles.item_fact_label}>Price</span>
-                        <span className={styles.item_fact_value}>3 BNB</span>
+                        <span className={styles.item_fact_value}> {(new Date('2024-02-29T20:00:00+07:00') > new Date()) ? "3 BNB" : "2 BNB"}</span>
                       </div>
                     </div>
                     <div className="my-3 col-12 col-sm-6">
