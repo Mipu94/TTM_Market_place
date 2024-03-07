@@ -9,3 +9,8 @@ typechain-types
 app/contracts
 typechain-types
 secrets.json
+.env
+app/package-lock.json
+package-lock.json
+app/.env
+nohup.out
