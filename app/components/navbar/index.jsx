@@ -8,7 +8,7 @@ const siteMap = [
   { id: 2, name: "Minted NFT", route: "/minted" },
   { id: 3, name: "contact", route: "/contact" },
   { id: 4, name: "Roadmaps", route: "/roadmaps" },
-  { id: 3, name: "White Paper", route: "/white-paper" },
+  { id: 5, name: "White Paper", route: "/white-paper" },
   // { id: 5, name: "my NFT", route: "/my-nft" },
 ];
 

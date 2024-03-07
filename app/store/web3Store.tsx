@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { TTM_NFT__factory, TTM_NFT } from "../typechain"
+import { TTM_NFT__factory, TTM_NFT, TTM_Airdrop__factory, TTM_Airdrop } from "../typechain"
 import { ethers } from 'ethers';
 import { useEffect, useRef } from 'react';
 const addresses = require("../contracts/contract-address.json");
@@ -13,6 +13,7 @@ interface Web3ModalStorage {
     connect: () => void;
     disconnect: () => void;
     NFTContract: TTM_NFT | null;
+    AirdropContract: TTM_Airdrop | null;
     // MarketplaceContract: Marketplace | null;
     init(): void;
     isInit: boolean;
@@ -28,6 +29,7 @@ interface Web3ModalStorage {
     freeItems: number[];
     setFreeItems: (freeItems: number[]) => void;
     mintNFT: (tokenId: number) => void;
+
 }
 
 
@@ -57,13 +59,14 @@ export const useWebStore = create<Web3ModalStorage>((set, get) => ({
         set({ walletAddress: await signer.getAddress() });
         // set({ NFTContract: TTM_NFT__factory.connect(addresses.nftAddress, provider), MarketplaceContract: Marketplace__factory.connect(addresses.marketplaceAddress, signer) });
         set({ NFTContract: TTM_NFT__factory.connect(addresses.nftAddress, signer) });
+        set({ AirdropContract: TTM_Airdrop__factory.connect(addresses.airdropAddress, signer) });
         enqueueSnackbar("Connected", { variant: 'success' });
     },
     disconnect: () => set({ isConnected: false }),
     NFTContract: null,
+    AirdropContract: null,
     // MarketplaceContract: null,
     init: async () => {
-
         if (!window.ethereum) {
             enqueueSnackbar("Please install MetaMask Wallet", { variant: 'error' });
             return;
@@ -89,11 +92,16 @@ export const useWebStore = create<Web3ModalStorage>((set, get) => ({
         if (accounts.length == 0) {
             // set({ NFTContract: TTM_NFT__factory.connect(addresses.nftAddress, provider), MarketplaceContract: Marketplace__factory.connect(addresses.marketplaceAddress, provider) });
             set({ NFTContract: TTM_NFT__factory.connect(addresses.nftAddress, provider) });
+            set({ AirdropContract: TTM_Airdrop__factory.connect(addresses.airdropAddress, provider) });
+
             return set({ isConnected: false, walletAddress: null });
+
         }
         const signer = provider.getSigner();
         // set({ NFTContract: TTM_NFT__factory.connect(addresses.nftAddress, signer), MarketplaceContract: Marketplace__factory.connect(addresses.marketplaceAddress, signer) });
         set({ NFTContract: TTM_NFT__factory.connect(addresses.nftAddress, signer) });
+        set({ AirdropContract: TTM_Airdrop__factory.connect(addresses.airdropAddress, signer) });
+
         set({ isConnected: true, walletAddress: accounts[0] });
         // check is develop env
 
@@ -145,6 +153,62 @@ export const useWebStore = create<Web3ModalStorage>((set, get) => ({
     setTotalMinted: (totalMinted: number) => { console.log("setting", totalMinted); set({ totalMinted }) },
     setMintedItems: (mintedItems: number[]) => set({ mintedItems }),
     setFreeItems: (freeItems: number[]) => set({ freeItems }),
+    getRemainAirdrop: async () => {
+        let AirdropContract = get().AirdropContract;
+        let wallet = get().walletAddress;
+        if (AirdropContract != null && wallet != null) {
+            let remain = await AirdropContract?.getMintedCount(wallet);
+            return 5 - remain;
+        }
+        return 0;
+    },
+    claimAirdrop: async () => {
+        // return alert("not ready to mint, please wait for the release.");
+        let isConnected = get().isConnected;
+        let AirdropContract = get().AirdropContract;
+        if (isConnected && AirdropContract != null) {
+            try {
+                let price = await AirdropContract?.gasValue();
+                let tx = await AirdropContract?.mint(
+                    {
+                        value: price,
+                    }
+                );
+                enqueueSnackbar("claiming airdrop, please wait... ", {
+                    variant: "success",
+                });
+                await tx.wait();
+                window.location.reload();
+
+            } catch (e: any) {
+                if (e.message.includes("Not allowed public mint")) {
+                    return enqueueSnackbar("this NFT is not ready to mint, please wait for the release.", { variant: "error" });
+                }
+                if (e.message.includes("Insufficient funds sent")) {
+                    return enqueueSnackbar("Insufficient funds sent", { variant: "error" })
+                }
+
+                if (e.message.includes("Insufficient token amount in the contract")) {
+                    return enqueueSnackbar("No more token to claim, please wait for next airdrop.", { variant: "error" })
+                }
+
+                if (e.data?.message?.includes("insufficient funds")) {
+                    return enqueueSnackbar("Insufficient funds.", { variant: "error" })
+                }
+
+                if (e.message.includes("user rejected transaction ")) {
+                    // return enqueueSnackbar("user rejected transaction ", { variant: "error" })
+                }
+                else {
+                    enqueueSnackbar(e.message, { variant: "error" });
+                }
+                console.log(e)
+            }
+        } else {
+            enqueueSnackbar("wallet is not connected", { variant: "error" });
+        }
+
+    },
     mintNFT: async (id: number) => {
         // return alert("not ready to mint, please wait for the release.");
         let isConnected = get().isConnected;
@@ -161,10 +225,12 @@ export const useWebStore = create<Web3ModalStorage>((set, get) => ({
                         value: price,
                     }
                 );
-
                 enqueueSnackbar("minting 1 NFT to " + tx.to, {
                     variant: "success",
                 });
+                await tx.wait();
+                window.location.reload();
+
                 setTimeout(() => {
                     window.location.reload();
                 }, 5000);

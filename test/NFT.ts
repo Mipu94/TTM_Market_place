@@ -5,7 +5,7 @@ import { ethers } from "hardhat";
 describe("deploy NFT Contract", function () {
   async function deployTokenFixture() {
     const NFT = await ethers.getContractFactory("TTM_NFT");
-    const [owner, addr1, addr2] = await ethers.getSigners();
+    const [owner, addr1, addr2, addr3] = await ethers.getSigners();
     const Token = await ethers.getContractFactory("TTM");
     // owner holding 1k B token
     const tokenContract = await Token.deploy(owner.address);
@@ -16,7 +16,10 @@ describe("deploy NFT Contract", function () {
 
     const nftContract = await NFT.deploy("Astronauts NFT", "ASTR", tokenContract.address, "2000000000000000000000000000", "http://localhost/api/nft/", addr2.address);
     await nftContract.deployed();
-    return { tokenContract, nftContract, owner, addr1, addr2 };
+    const airdrop = await ethers.getContractFactory("TTM_Airdrop");
+    const airdropContract = await airdrop.deploy(tokenContract.address, "1000000000000000000000000", addr3.address);
+
+    return { tokenContract, nftContract, airdropContract, owner, addr1, addr2, finWallet: addr3 };
     // return { tokenContract, marketPlaceContract, marketPlace, nftContract, owner, addr1, addr2 };
   }
 
@@ -75,6 +78,32 @@ describe("deploy NFT Contract", function () {
     expect(await tokenContract.balanceOf(addr1.address)).to.equal(ethers.utils.parseEther("4000000000"));
   });
 
+  it("test airdrop amount", async function () {
+    const { tokenContract, nftContract, airdropContract, finWallet, owner, addr1 } = await loadFixture(deployTokenFixture);
+    // send 2B token to airdrop contract
+    await tokenContract.connect(owner).transfer(airdropContract.address, ethers.utils.parseEther("2000000000"));
+    expect(await tokenContract.balanceOf(airdropContract.address)).to.equal(ethers.utils.parseEther("2000000000"));
+    let mintPrice = await airdropContract.gasValue();
+    await expect(airdropContract.connect(addr1).mint({ value: mintPrice })).to.be.revertedWith("Not allowed public mint");
+
+    // set allow public mint 
+    await airdropContract.connect(owner).setAllowPublicMint(true);
+    await airdropContract.connect(addr1).mint({ value: mintPrice });
+    expect(await ethers.provider.getBalance(finWallet.address)).to.equal(ethers.utils.parseEther("10000.006"));
+
+    // mint util 5 times
+    for (let i = 0; i < 4; i++)
+      await airdropContract.connect(addr1).mint({ value: mintPrice });
+
+    await expect(airdropContract.connect(addr1).mint({ value: mintPrice })).to.be.revertedWith("You can only claim 5 times");
+
+
+    // expect(await tokenContract.balanceOf(airdropContract.address)).to.equal(ethers.utils.parseEther("2000000000"));
+    // // expect receive 0.005 ETH
+
+
+
+  });
 
   describe(" check token transfered to owner", function () {
     it("test transfer", async function () {

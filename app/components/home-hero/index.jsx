@@ -7,13 +7,33 @@ import { useTheme } from "next-themes";
 import Image from "next/image";
 import Countdown from 'react-countdown';
 import { useWebStore } from "../../store/web3Store";
+import { useEffect, useState } from "react";
+import { enqueueSnackbar } from 'notistack';
 
 export default function Hero() {
-  const { mintedItems, isConnected } = useWebStore();
+  const { mintedItems, isConnected, claimAirdrop, getRemainAirdrop } = useWebStore();
   const { theme, setTheme } = useTheme();
-  // let id = Math.floor(Math.random() * 2) + 1;
-  let id = 1;
+  const [remainClaims, setRemainClaims] = useState(0);
 
+  useEffect(async () => {
+    if (isConnected) {
+      let x = await getRemainAirdrop();
+      setRemainClaims(x);
+    }
+  }, [isConnected]);
+
+  async function handleClaimAirdrop() {
+    if (!isConnected) {
+      return enqueueSnackbar("Please connect wallet to claim.", { variant: "error" });
+    }
+
+    if (remainClaims > 0)
+      await claimAirdrop()
+    else {
+      return enqueueSnackbar("This wallet can't claim airdrop anymore.", { variant: "error" });
+    }
+  }
+  let id = 1;
   return (
     <section className={styles.home_page_hero_section}>
       <div className="container">
@@ -61,6 +81,12 @@ export default function Hero() {
                     <CtaButton href={"/white-paper"}>
                       <HiOutlineDocumentDuplicate className="me-2" />
                       White Paper
+                    </CtaButton>
+                  </div>
+                  <div className=" my-3 my-sm-0 mx-sm-3" onClick={handleClaimAirdrop}>
+                    <CtaButton href={""}  >
+                      <HiOutlineDocumentDuplicate className="me-2" />
+                      Claim Airdrop {isConnected ? "(" + remainClaims + ")" : ""}
                     </CtaButton>
                   </div>
                 </div>

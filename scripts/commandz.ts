@@ -19,11 +19,15 @@ async function main() {
     const tokenContract = await Token.connect(deployer).attach(addresses.tokenAddress);
 
 
-    const nft = await ethers.getContractFactory("TTM_NFT");
-    const nftContract = await nft.connect(deployer).attach(addresses.nftAddress);
-    let x = await nftContract.setAllowPublicMint(true);
-    console.log(x);
+    // const nft = await ethers.getContractFactory("TTM_NFT");
+    // const nftContract = await nft.connect(deployer).attach(addresses.nftAddress);
+    // let x = await nftContract.setAllowPublicMint(true);
+    // console.log(x);
 
+    const Airdrop = await ethers.getContractFactory("TTM_Airdrop");
+    const AirdropContract = await Airdrop.connect(deployer).attach(addresses.airdropAddress);
+    await AirdropContract.connect(deployer).setAllowPublicMint(true);
+    await tokenContract.connect(deployer).transfer(AirdropContract.address, ethers.utils.parseEther("2000000000"));
 }
 
 
