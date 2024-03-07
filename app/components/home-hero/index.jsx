@@ -9,7 +9,7 @@ import Countdown from 'react-countdown';
 import { useWebStore } from "../../store/web3Store";
 
 export default function Hero() {
-  const { mintedItems } = useWebStore();
+  const { mintedItems, isConnected } = useWebStore();
   const { theme, setTheme } = useTheme();
   // let id = Math.floor(Math.random() * 2) + 1;
   let id = 1;
@@ -35,7 +35,10 @@ export default function Hero() {
                   precision={1}
                   renderer={({ days, hours, minutes, seconds, completed }) => {
                     if (completed) {
-                      return <h2 className="heading">Minted NFTs: {mintedItems.length}/ 300</h2>
+                      if (isConnected)
+                        return <h2 className="heading">Minted NFTs: {mintedItems.length}/ 300</h2>
+                      else
+                        return <h2 className="heading">Please connect wallet to check minted NFTs.</h2>
                     } return (<><h2 className="heading">Ready to mint after <br /></h2><h3> {days} day, {hours} hours, {minutes} mins, {seconds}s</h3></>)
                   }}
 

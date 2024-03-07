@@ -20,12 +20,12 @@ const networks = {
     }
   },
   "prod": {
-    rpcUrls: ["https://data-seed-prebsc-1-s1.bnbchain.org:8545"],
-    chainId: "0x61",
-    chainName: "BSC testnet",
+    rpcUrls: ["https://bsc-dataseed1.binance.org/", "https://bsc-dataseed2.binance.org/"],
+    chainId: "0x38",
+    chainName: "BNB Smart Chain",
     nativeCurrency: {
-      name: "TBNB",
-      symbol: "tBNB",
+      name: "BNB",
+      symbol: "BNB",
       decimals: 18
     }
   },
