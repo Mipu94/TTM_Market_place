@@ -20,6 +20,10 @@ reset:
 	sudo docker-compose -f $(COMPOSE_FILE) -p $(PROJECT) rm -f && \
 	sudo docker-compose -f $(COMPOSE_FILE) -p $(PROJECT) up -d --build
 
+.PHONY: restart
+restart:
+	sudo docker-compose -f $(COMPOSE_FILE) -p $(PROJECT) restart 
+
 .PHONY: stop
 stop:
 	sudo docker-compose -f $(COMPOSE_FILE) -p $(PROJECT) stop 
